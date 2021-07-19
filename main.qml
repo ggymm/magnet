@@ -5,15 +5,15 @@ import QtQuick.Controls.Material 2.5
 
 ApplicationWindow {
     id: main
-	title: "磁力链接搜索"
-	width: 1280
+    title: "磁力链接搜索"
+    width: 1280
     height: 720
     minimumWidth: 960
     minimumHeight: 540
     visible: true
     visibility: Window.Windowed
 
-	Material.theme: Material.Dark
+    Material.theme: Material.Dark
 
 
     Connections {
@@ -21,18 +21,18 @@ ApplicationWindow {
     }
 
     ListModel {
-		id: website_list
-		ListElement {
-		    url: "test"
-			name: "测试网站"
-		}
-		ListElement {
-			url: "test1"
-			name: "测试网站1"
-		}
-	}
+        id: website_list
+        ListElement {
+            url: "test"
+            name: "测试网站"
+        }
+        ListElement {
+            url: "test1"
+            name: "测试网站1"
+        }
+    }
 
-	ListModel {
+    ListModel {
         id: result_data
         ListElement {
             name: "蜘蛛侠：英雄归来.2017.1080p.国英双语.中英字幕￡CMCT梦幻"
