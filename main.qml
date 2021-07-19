@@ -138,7 +138,7 @@ ApplicationWindow {
     }
 
     ListView {
-        id: result_data
+        id: search_result
         anchors {
             top: search_info.bottom
             right: parent.right
