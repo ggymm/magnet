@@ -1,0 +1,19 @@
+{
+    "btgg": {
+        "id": "btgg", 
+        "name": "BTGG", 
+        "paths": {
+            "preset": "/search?q={k}&p={p}"
+        }, 
+        "proxy": false, 
+        "url": "https://www.btgg.in", 
+        "xpath": {
+            "date": "./div[2]/span[3]", 
+            "group": "//div[@class=\"item\"]", 
+            "hot": "./div[2]/span[2]", 
+            "magnet": "./div[2]/a/@href", 
+            "name": "./div[1]/a", 
+            "size": "./div[2]/span[1]"
+        }
+    }
+}

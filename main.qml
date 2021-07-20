@@ -15,7 +15,6 @@ ApplicationWindow {
 
     Material.theme: Material.Dark
 
-
     Connections {
         target : backend
     }
@@ -23,76 +22,12 @@ ApplicationWindow {
     ListModel {
         id: website_list
         ListElement {
-            url: "test"
-            name: "测试网站"
+            key: "test"
+            value: "测试网站"
         }
         ListElement {
-            url: "test1"
-            name: "测试网站1"
-        }
-    }
-
-    ListModel {
-        id: result_data
-        ListElement {
-            name: "蜘蛛侠：英雄归来.2017.1080p.国英双语.中英字幕￡CMCT梦幻"
-            hot: "99"
-            time: "2020-07-19 10:43"
-            size: "12.00GB"
-        }
-        ListElement {
-            name: "蜘蛛侠：英雄归来.2017.1080p.国英双语.中英字幕￡CMCT梦幻"
-            hot: "99"
-            time: "2020-07-19 10:43"
-            size: "12.00GB"
-        }
-        ListElement {
-            name: "蜘蛛侠：英雄归来.2017.1080p.国英双语.中英字幕￡CMCT梦幻"
-            hot: "99"
-            time: "2020-07-19 10:43"
-            size: "12.00GB"
-        }
-        ListElement {
-            name: "蜘蛛侠：英雄归来.2017.1080p.国英双语.中英字幕￡CMCT梦幻"
-            hot: "99"
-            time: "2020-07-19 10:43"
-            size: "12.00GB"
-        }
-        ListElement {
-            name: "蜘蛛侠：英雄归来.2017.1080p.国英双语.中英字幕￡CMCT梦幻"
-            hot: "99"
-            time: "2020-07-19 10:43"
-            size: "12.00GB"
-        }
-        ListElement {
-            name: "蜘蛛侠：英雄归来.2017.1080p.国英双语.中英字幕￡CMCT梦幻"
-            hot: "99"
-            time: "2020-07-19 10:43"
-            size: "12.00GB"
-        }
-        ListElement {
-            name: "蜘蛛侠：英雄归来.2017.1080p.国英双语.中英字幕￡CMCT梦幻"
-            hot: "99"
-            time: "2020-07-19 10:43"
-            size: "12.00GB"
-        }
-        ListElement {
-            name: "蜘蛛侠：英雄归来.2017.1080p.国英双语.中英字幕￡CMCT梦幻"
-            hot: "99"
-            time: "2020-07-19 10:43"
-            size: "12.00GB"
-        }
-        ListElement {
-            name: "蜘蛛侠：英雄归来.2017.1080p.国英双语.中英字幕￡CMCT梦幻"
-            hot: "99"
-            time: "2020-07-19 10:43"
-            size: "12.00GB"
-        }
-        ListElement {
-            name: "蜘蛛侠：英雄归来.2017.1080p.国英双语.中英字幕￡CMCT梦幻"
-            hot: "99"
-            time: "2020-07-19 10:43"
-            size: "12.00GB"
+            key: "test1"
+            value: "测试网站1"
         }
     }
 
@@ -106,8 +41,8 @@ ApplicationWindow {
             y: 20
             width: 200
             model: website_list
-            textRole: "name"
-            valueRole: "url"
+            textRole: "value"
+            valueRole: "key"
         }
 
         TextField {
@@ -154,7 +89,7 @@ ApplicationWindow {
         ScrollBar.vertical: ScrollBar {}
         boundsBehavior: Flickable.StopAtBounds
 
-        model: result_data
+        model: backend.search_result_list
 
         delegate: Item {
             width: main.width - 80
@@ -214,6 +149,9 @@ ApplicationWindow {
                     id: download
                     height: 40
                     text: "迅雷下载"
+                    onClicked: {
+                        backend.download(model.magnet)
+                    }
                 }
 
                 Button {

@@ -1,0 +1,18 @@
+{
+    "alibt": {
+        "id": "alibt", 
+        "name": " 阿里BT", 
+        "paths": {
+            "preset": "/zh-cn/s/{p}/{k}"
+        }, 
+        "proxy": true, 
+        "url": "https://alibt.pw", 
+        "xpath": {
+            "date": "./p[2]/span[1]", 
+            "group": "//*[@id=\"wrapper\"]/ul/li", 
+            "magnet": "./p[1]/a/@href", 
+            "name": "./p[1]/a", 
+            "size": "./p[2]/span[2]"
+        }
+    }
+}

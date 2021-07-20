@@ -1,0 +1,21 @@
+{
+    "nyaa": {
+        "id": "nyaa", 
+        "name": "Nyaa", 
+        "paths": {
+            "preset": "/search/c_{p}_0_k_{k}"
+        }, 
+        "proxy": false, 
+        "url": "https://nyaa.fun", 
+        "xpath": {
+            "date": "./td[5]", 
+            "detail": {
+                "files": "//div[@class=\"torrent-file-list panel-body\"]/ul/li"
+            }, 
+            "group": "//div[@class='table-responsive']/table/tbody/tr", 
+            "magnet": "./td[3]/a[2]/@href", 
+            "name": "./td[2]/a", 
+            "size": "./td[4]"
+        }
+    }
+}
