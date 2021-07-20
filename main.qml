@@ -22,12 +22,108 @@ ApplicationWindow {
     ListModel {
         id: website_list
         ListElement {
-            key: "test"
-            value: "测试网站"
+            key: "zhongzisou"
+            value: "种子搜"
         }
         ListElement {
-            key: "test1"
-            value: "测试网站1"
+            key: "btgg"
+            value: "BTGG"
+        }
+        ListElement {
+            key: "idope"
+            value: "idope"
+        }
+        ListElement {
+            key: "btsow"
+            value: "BTSOW"
+        }
+        ListElement {
+            key: "btdet"
+            value: "BT蚂蚁"
+        }
+        ListElement {
+            key: "bt4g"
+            value: "BT4G"
+        }
+        ListElement {
+            key: "btdb"
+            value: " BTDB"
+        }
+        ListElement {
+            key: "btdiguo"
+            value: "BT目录"
+        }
+        ListElement {
+            key: "cilibao"
+            value: "磁力宝"
+        }
+        ListElement {
+            key: "bthub"
+            value: "BThub"
+        }
+        ListElement {
+            key: "btdad"
+            value: " Btdad"
+        }
+        ListElement {
+            key: "alibt"
+            value: " 阿里BT"
+        }
+        ListElement {
+            key: "mag"
+            value: "MAG磁力站"
+        }
+        ListElement {
+            key: "clzz"
+            value: "磁力蜘蛛"
+        }
+        ListElement {
+            key: "ciligou"
+            value: " 磁力狗"
+        }
+        ListElement {
+            key: "ciliba"
+            value: " 磁力吧"
+        }
+        ListElement {
+            key: "btfox"
+            value: " btfox"
+        }
+        ListElement {
+            key: "kickass"
+            value: "KickassTorrents"
+        }
+        ListElement {
+            key: "zooqle"
+            value: "Zooqle"
+        }
+        ListElement {
+            key: "nyaa"
+            value: "Nyaa"
+        }
+        ListElement {
+            key: "sukebei"
+            value: "Sukebei Nyaa"
+        }
+        ListElement {
+            key: "sobt"
+            value: " Sobt"
+        }
+        ListElement {
+            key: "dmhy"
+            value: "动漫花园"
+        }
+        ListElement {
+            key: "thepiratebay_z"
+            value: "The Pirate Bay"
+        }
+        ListElement {
+            key: "extratorrent"
+            value: "ExtraTorrent"
+        }
+        ListElement {
+            key: "1337x"
+            value: "1337X（英文）"
         }
     }
 

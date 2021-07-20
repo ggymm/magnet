@@ -13,7 +13,21 @@ if __name__ == "__main__":
     with open("rule.json", encoding="utf-8") as f:
         rule_list = json.load(f)
 
+        model_list = []
         for rule in rule_list:
-            result = {rule["id"]: rule}
+            model_list.append({
+                "key": rule["id"],
+                "value": rule["name"],
+            })
             fp = codecs.open("rule/" + rule["id"] + ".json", "w", "utf-8")
-            fp.write(json.dumps(result, ensure_ascii=False, sort_keys=True, indent=4, separators=(", ", ": ")))
+            fp.write(json.dumps({rule["id"]: rule}, ensure_ascii=False, sort_keys=True, indent=4, separators=(", ", ": ")))
+
+        model_str = ""
+        for model in model_list:
+            model_str += """
+    ListElement {
+        key: "%s"
+        value: "%s"
+    }""" % (model["key"], model["value"])
+
+        print(model_str)
