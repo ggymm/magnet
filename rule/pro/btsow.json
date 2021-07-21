@@ -6,14 +6,5 @@
   },
   "proxy": true,
   "url": "https://btsow.com",
-  "xpath": {
-    "date": "./div[2]",
-    "detail": {
-      "files": "//div[@class=\"detail data-list\"]/div/text()"
-    },
-    "group": "//div[@class='row']",
-    "magnet": "./a/@href",
-    "name": "./a/div[1]",
-    "size": "./div[1]"
-  }
+  "selector": "div.data-list > div.row"
 }

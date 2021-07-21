@@ -35,7 +35,7 @@ class QDataListModel(QAbstractListModel):
         index = index.row()
         row = self.model[index]
 
-        return row[str(self.roleNames()[role], 'utf-8')]
+        return row[str(self.roleNames()[role], "utf-8")]
 
 
 class MainWindow(QObject):
@@ -44,19 +44,8 @@ class MainWindow(QObject):
         self._pool = ThreadPoolExecutor()
         self._search_result_list = QDataListModel([])
 
-    def search_result(self, future):
-        print(future.result())
-        # 抓取数据
-        data = []
-        for i in range(1, 20):
-            data.append({
-                "name": "蜘蛛侠：英雄归来.2017.1080p.国英双语.中英字幕￡CMCT梦幻",
-                "time": "2020-07-19 10:43",
-                "size": "12.00GB",
-                "hot": "99",
-                "magnet": "111111",
-            })
-        self._search_result_list = QDataListModel(data)
+    def search_done(self, future):
+        self._search_result_list = QDataListModel(future.result())
 
         # 触发页面刷新（忽视编辑器莫名其妙的警告）
         # noinspection PyUnresolvedReferences
@@ -72,7 +61,7 @@ class MainWindow(QObject):
         print(key)
         print(search_terms)
         print("执行搜索")
-        self._pool.submit(run_crawler, key, "龙珠Z", "1", "").add_done_callback(self.search_result)
+        self._pool.submit(run_crawler, key, "龙珠Z", "1", "").add_done_callback(self.search_done)
 
     search_result_changed = Signal()
 
