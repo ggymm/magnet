@@ -1,21 +1,19 @@
 {
-    "btdiguo": {
-        "id": "btdiguo", 
-        "name": "BT目录", 
-        "paths": {
-            "hot": "/search-hot/{k}/page-{p}.html", 
-            "size": "/search-size/{k}/page-{p}.html", 
-            "time": "/search-update/{k}/page-{p}.html"
-        }, 
-        "proxy": false, 
-        "url": "https://btmulu3.club", 
-        "xpath": {
-            "date": "./p[1]", 
-            "group": "//article[@class=\"item\"]/div", 
-            "hot": "./p[1]", 
-            "magnet": "./a/@href", 
-            "name": "./a", 
-            "size": "./p[1]"
-        }
-    }
+  "id": "btdiguo", 
+  "name": "BT目录", 
+  "paths": {
+    "hot": "/search-hot/{k}/page-{p}.html", 
+    "size": "/search-size/{k}/page-{p}.html", 
+    "time": "/search-update/{k}/page-{p}.html"
+  }, 
+  "proxy": false, 
+  "url": "https://btmulu3.club", 
+  "xpath": {
+    "date": "./p[1]", 
+    "group": "//article[@class=\"item\"]/div", 
+    "hot": "./p[1]", 
+    "magnet": "./a/@href", 
+    "name": "./a", 
+    "size": "./p[1]"
+  }
 }

@@ -1,4 +1,5 @@
 import sys
+from concurrent.futures import ThreadPoolExecutor
 
 from PySide6.QtCore import QAbstractListModel, Qt, QModelIndex, QObject, Slot, Property, Signal
 from PySide6.QtGui import QGuiApplication
@@ -15,7 +16,7 @@ class QDataListModel(QAbstractListModel):
     MAGNET = Qt.UserRole + 1004
 
     def __init__(self, model):
-        super().__init__()
+        QAbstractListModel.__init__(self)
         self.model = model
 
     def rowCount(self, parent=None) -> int:
@@ -40,22 +41,11 @@ class QDataListModel(QAbstractListModel):
 class MainWindow(QObject):
     def __init__(self):
         QObject.__init__(self)
+        self._pool = ThreadPoolExecutor()
         self._search_result_list = QDataListModel([])
 
-    @Slot(str)
-    def download(self, magnet):
-        print("调用迅雷下载")
-        print(magnet)
-
-    @Slot(str, str)
-    def search(self, key, search_terms):
-        print(key)
-        print(search_terms)
-        print("执行搜索")
-
-        infos = run_crawler(key, search_terms)
-        print(infos)
-
+    def search_result(self, future):
+        print(future.result())
         # 抓取数据
         data = []
         for i in range(1, 20):
@@ -68,9 +58,21 @@ class MainWindow(QObject):
             })
         self._search_result_list = QDataListModel(data)
 
-        # 触发页面刷新
+        # 触发页面刷新（忽视编辑器莫名其妙的警告）
         # noinspection PyUnresolvedReferences
         self.search_result_changed.emit()
+
+    @Slot(str)
+    def download(self, magnet):
+        print("调用迅雷下载")
+        print(magnet)
+
+    @Slot(str, str)
+    def search(self, key, search_terms):
+        print(key)
+        print(search_terms)
+        print("执行搜索")
+        self._pool.submit(run_crawler, key, "龙珠Z", "1", "").add_done_callback(self.search_result)
 
     search_result_changed = Signal()
 

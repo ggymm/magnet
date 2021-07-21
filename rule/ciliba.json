@@ -1,23 +1,21 @@
 {
-    "ciliba": {
-        "id": "ciliba", 
-        "name": " 磁力吧", 
-        "paths": {
-            "hot": "/s/{k}/3/{p}.html", 
-            "size": "/s/{k}/2/{p}.html", 
-            "time": "/s/{k}/1/{p}.html"
-        }, 
-        "url": "http://clb8.me", 
-        "xpath": {
-            "date": "./div[3]/span[2]/b[1]", 
-            "detail": {
-                "magnet": "./div[1]/p[7]/a[1]/@href", 
-                "root": "//*[@id=\"wall\"]"
-            }, 
-            "group": "//div[@class='search-item']", 
-            "hot": "./div[3]/span[4]/b[1]", 
-            "name": "./div[1]/h3[1]/a[1]", 
-            "size": "./div[3]/span[3]/b[1]"
-        }
-    }
+  "id": "ciliba", 
+  "name": " 磁力吧", 
+  "paths": {
+    "hot": "/s/{k}/3/{p}.html", 
+    "size": "/s/{k}/2/{p}.html", 
+    "time": "/s/{k}/1/{p}.html"
+  }, 
+  "url": "http://clb8.me", 
+  "xpath": {
+    "date": "./div[3]/span[2]/b[1]", 
+    "detail": {
+      "magnet": "./div[1]/p[7]/a[1]/@href", 
+      "root": "//*[@id=\"wall\"]"
+    }, 
+    "group": "//div[@class='search-item']", 
+    "hot": "./div[3]/span[4]/b[1]", 
+    "name": "./div[1]/h3[1]/a[1]", 
+    "size": "./div[3]/span[3]/b[1]"
+  }
 }

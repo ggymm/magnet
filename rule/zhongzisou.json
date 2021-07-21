@@ -1,24 +1,22 @@
 {
-    "zhongzisou": {
-        "id": "zhongzisou", 
-        "name": "种子搜", 
-        "paths": {
-            "hot": "/list_click/{k}/{p}", 
-            "size": "/list_length/{k}/{p}", 
-            "time": "/list/{k}/{p}"
-        }, 
-        "proxy": false, 
-        "url": "https://zhongzilou.proxyit.ga", 
-        "xpath": {
-            "date": "./tbody/tr/td[1]/strong", 
-            "detail": {
-                "files": "//*[@id=\"wrapp\"]/div[2]/div/div/div[3]/div[1]/div[2]/div[2]/select/option"
-            }, 
-            "group": "//table[@class='table table-bordered table-striped']", 
-            "hot": "./tbody/tr[2]/td[3]/strong", 
-            "magnet": "./tbody/tr[1]/td/div/h4/a/@href", 
-            "name": "./tbody/tr[1]/td/div/h4/a", 
-            "size": "./tbody/tr/td[2]/strong"
-        }
-    }
+  "id": "zhongzisou", 
+  "name": "种子搜", 
+  "paths": {
+    "hot": "/list_click/{k}/{p}", 
+    "size": "/list_length/{k}/{p}", 
+    "time": "/list/{k}/{p}"
+  }, 
+  "proxy": false, 
+  "url": "https://zhongzilou.proxyit.ga", 
+  "xpath": {
+    "date": "./tbody/tr/td[1]/strong", 
+    "detail": {
+      "files": "//*[@id=\"wrapp\"]/div[2]/div/div/div[3]/div[1]/div[2]/div[2]/select/option"
+    }, 
+    "group": "//table[@class='table table-bordered table-striped']", 
+    "hot": "./tbody/tr[2]/td[3]/strong", 
+    "magnet": "./tbody/tr[1]/td/div/h4/a/@href", 
+    "name": "./tbody/tr[1]/td/div/h4/a", 
+    "size": "./tbody/tr/td[2]/strong"
+  }
 }

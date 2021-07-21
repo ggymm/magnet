@@ -1,25 +1,23 @@
 {
-    "1337x": {
-        "id": "1337x", 
-        "name": "1337X（英文）", 
-        "paths": {
-            "hot": "/sort-search/{k}/leechers/desc/{p}/", 
-            "preset": "/search/{k}/{p}/", 
-            "size": "/sort-search/{k}/size/desc/{p}/", 
-            "time": "/sort-search/{k}/time/desc/{p}/"
-        }, 
-        "proxy": true, 
-        "url": "https://1337x.to", 
-        "xpath": {
-            "date": "./td[4]", 
-            "detail": {
-                "magnet": "./div[1]/ul[1]/li[1]/a/@href", 
-                "root": "/html/body/main/div/div/div/div[2]"
-            }, 
-            "group": "//div[@class='table-list-wrap']/table/tbody/tr", 
-            "hot": "./td[8]", 
-            "name": "./td[1]/a[2]", 
-            "size": "./td[5]"
-        }
-    }
+  "id": "1337x", 
+  "name": "1337X（英文）", 
+  "paths": {
+    "hot": "/sort-search/{k}/leechers/desc/{p}/", 
+    "preset": "/search/{k}/{p}/", 
+    "size": "/sort-search/{k}/size/desc/{p}/", 
+    "time": "/sort-search/{k}/time/desc/{p}/"
+  }, 
+  "proxy": true, 
+  "url": "https://1337x.to", 
+  "xpath": {
+    "date": "./td[4]", 
+    "detail": {
+      "magnet": "./div[1]/ul[1]/li[1]/a/@href", 
+      "root": "/html/body/main/div/div/div/div[2]"
+    }, 
+    "group": "//div[@class='table-list-wrap']/table/tbody/tr", 
+    "hot": "./td[8]", 
+    "name": "./td[1]/a[2]", 
+    "size": "./td[5]"
+  }
 }

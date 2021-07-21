@@ -1,21 +1,19 @@
 {
-    "clzz": {
-        "id": "clzz", 
-        "name": "磁力蜘蛛", 
-        "paths": {
-            "preset": "/s/{k}_rel_{p}.html", 
-            "size": "/s/{k}_size_{p}.html", 
-            "time": "/s/{k}_time_{p}.html"
-        }, 
-        "proxy": false, 
-        "url": "http://www.btmovi.life", 
-        "xpath": {
-            "date": "./div[3]/span[2]/b[1]", 
-            "group": "//div[@class='search-item']", 
-            "hot": "./div[3]/span[4]/b[1]", 
-            "magnet": "./div[1]/h3[1]/a[1]/@href", 
-            "name": "./div[1]/h3[1]/a[1]", 
-            "size": "./div[3]/span[3]/b[1]"
-        }
-    }
+  "id": "clzz", 
+  "name": "磁力蜘蛛", 
+  "paths": {
+    "preset": "/s/{k}_rel_{p}.html", 
+    "size": "/s/{k}_size_{p}.html", 
+    "time": "/s/{k}_time_{p}.html"
+  }, 
+  "proxy": false, 
+  "url": "http://www.btmovi.life", 
+  "xpath": {
+    "date": "./div[3]/span[2]/b[1]", 
+    "group": "//div[@class='search-item']", 
+    "hot": "./div[3]/span[4]/b[1]", 
+    "magnet": "./div[1]/h3[1]/a[1]/@href", 
+    "name": "./div[1]/h3[1]/a[1]", 
+    "size": "./div[3]/span[3]/b[1]"
+  }
 }

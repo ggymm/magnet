@@ -1,17 +1,15 @@
 {
-    "zooqle": {
-        "id": "zooqle", 
-        "name": "Zooqle", 
-        "paths": {
-            "preset": "/search?pg={p}&q={k}&v=t"
-        }, 
-        "url": "https://zooqle.com", 
-        "xpath": {
-            "date": "./td[5]", 
-            "group": "//*[@class='table table-condensed table-torrents vmiddle']/tr", 
-            "magnet": "./td[3]/ul/li/a/@href", 
-            "name": "./td[2]/a", 
-            "size": ".//td[4]/div/div"
-        }
-    }
+  "id": "zooqle", 
+  "name": "Zooqle", 
+  "paths": {
+    "preset": "/search?pg={p}&q={k}&v=t"
+  }, 
+  "url": "https://zooqle.com", 
+  "xpath": {
+    "date": "./td[5]", 
+    "group": "//*[@class='table table-condensed table-torrents vmiddle']/tr", 
+    "magnet": "./td[3]/ul/li/a/@href", 
+    "name": "./td[2]/a", 
+    "size": ".//td[4]/div/div"
+  }
 }

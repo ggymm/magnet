@@ -1,24 +1,22 @@
 {
-    "btdet": {
-        "id": "btdet", 
-        "name": "BT蚂蚁", 
-        "paths": {
-            "hot": "/search/{k}-hot-desc-{p}", 
-            "size": "/search/{k}-size-desc-{p}", 
-            "time": "/search/{k}-first-asc-{p}"
-        }, 
-        "proxy": false, 
-        "url": "https://btmayi.proxyit.ga", 
-        "xpath": {
-            "date": "./div[@class='item-bar']/span[1]/b", 
-            "detail": {
-                "files": "//*[@id=\"wall\"]/ol/li"
-            }, 
-            "group": "//div[@id='wall']/div[@class='search-item']", 
-            "hot": "./div[@class='item-bar']/span[2]/b", 
-            "magnet": "./div[@class='item-title']/a/@href", 
-            "name": "./div[@class='item-title']/a", 
-            "size": "./div[@class='item-bar']/span[4]/b"
-        }
-    }
+  "id": "btdet", 
+  "name": "BT蚂蚁", 
+  "paths": {
+    "hot": "/search/{k}-hot-desc-{p}", 
+    "size": "/search/{k}-size-desc-{p}", 
+    "time": "/search/{k}-first-asc-{p}"
+  }, 
+  "proxy": false, 
+  "url": "https://btmayi.proxyit.ga", 
+  "xpath": {
+    "date": "./div[@class='item-bar']/span[1]/b", 
+    "detail": {
+      "files": "//*[@id=\"wall\"]/ol/li"
+    }, 
+    "group": "//div[@id='wall']/div[@class='search-item']", 
+    "hot": "./div[@class='item-bar']/span[2]/b", 
+    "magnet": "./div[@class='item-title']/a/@href", 
+    "name": "./div[@class='item-title']/a", 
+    "size": "./div[@class='item-bar']/span[4]/b"
+  }
 }
