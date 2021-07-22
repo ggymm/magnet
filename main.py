@@ -1,7 +1,7 @@
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
-from PySide6.QtCore import QAbstractListModel, Qt, QModelIndex, QObject, Slot, Property, Signal
+from PySide6.QtCore import QAbstractListModel, Qt, QModelIndex, QObject, Slot, Property, Signal, QCoreApplication
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 
@@ -45,33 +45,40 @@ class MainWindow(QObject):
         self._search_result_list = QDataListModel([])
 
     def search_done(self, future):
-        self._search_result_list = QDataListModel(future.result())
+        if future.result() is None:
+            # 通知页面数据加载失败（忽视编辑器莫名其妙的警告）
+            # noinspection PyUnresolvedReferences
+            self.loadStateChanged.emit("loaded")
+        else:
+            self._search_result_list = QDataListModel(future.result())
 
-        # 触发页面刷新（忽视编辑器莫名其妙的警告）
+            # 通知页面数据加载完成（忽视编辑器莫名其妙的警告）
+            # noinspection PyUnresolvedReferences
+            self.loadStateChanged.emit("loaded")
+
+    @Slot(str, str)
+    def search(self, key, search_terms):
+        # 提交任务
+        self._pool.submit(run_crawler, key, search_terms, "1", "").add_done_callback(self.search_done)
+        # 通知页面处于加载状态（忽视编辑器莫名其妙的警告）
         # noinspection PyUnresolvedReferences
-        self.search_result_changed.emit()
+        self.loadStateChanged.emit("loading")
+
+    loadStateChanged = Signal(str)
+
+    # 绑定QML数据
+    @Property(QObject, constant=False, notify=loadStateChanged)
+    def search_result_list(self):
+        return self._search_result_list
 
     @Slot(str)
     def download(self, magnet):
         print("调用迅雷下载")
         print(magnet)
 
-    @Slot(str, str)
-    def search(self, key, search_terms):
-        print(key)
-        print(search_terms)
-        print("执行搜索")
-        self._pool.submit(run_crawler, key, "龙珠Z", "1", "").add_done_callback(self.search_done)
-
-    search_result_changed = Signal()
-
-    # 绑定QML数据
-    @Property(QObject, constant=False, notify=search_result_changed)
-    def search_result_list(self):
-        return self._search_result_list
-
 
 def main():
+    QCoreApplication.setAttribute(Qt.AA_UseSoftwareOpenGL)
     app = QGuiApplication(sys.argv)
     engine = QQmlApplicationEngine()
 

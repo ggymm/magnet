@@ -17,10 +17,23 @@ ApplicationWindow {
 
     Connections {
         target : backend
+        function onLoadStateChanged(state) {
+            if (state === "loading") {
+                search.text = "正在加载数据"
+                search.enabled = false
+            } else if (state === "loaded") {
+                search.text = "搜索"
+                search.enabled = true
+            }
+        }
     }
 
     ListModel {
         id: website_list
+        ListElement {
+            key: "all"
+            value: "聚合搜索"
+        }
         ListElement {
             key: "btgg"
             value: "BTGG"
@@ -32,6 +45,43 @@ ApplicationWindow {
         ListElement {
             key: "btsow_shadow"
             value: "BTSOW(非代理)"
+        }
+    }
+
+    Popup {
+        id: myPopup
+        x: (main.width-width)/2
+        y: (main.height-height)/2
+        width: 400
+        height: 300
+    }
+
+     menuBar: MenuBar {
+        Menu {
+            title: "磁力链接搜索"
+            MenuItem {
+                text: "加载规则文件"
+                onTriggered: console.log("加载规则文件");
+            }
+            MenuItem {
+                text: "设置"
+                onTriggered: console.log("加载规则文件");
+            }
+            MenuItem {
+                text: "退出"
+                onTriggered: Qt.quit();
+            }
+        }
+        Menu {
+            title: "帮助"
+            MenuItem {
+                text: "使用手册"
+                onTriggered: console.log("打开网页");
+            }
+            MenuItem {
+                text: "关于"
+                onTriggered: console.log("检查更新等");
+            }
         }
     }
 
@@ -47,16 +97,19 @@ ApplicationWindow {
             model: website_list
             textRole: "value"
             valueRole: "key"
+            currentIndex: 1
         }
 
         TextField {
-            id: keyword
+            id: search_terms
+            text: "龙珠"
             width: 520
             anchors {
                 top: website.top
                 left: website.right
                 leftMargin: 20
             }
+            hoverEnabled: false
             placeholderText: "搜索词"
             font.pointSize: 12
         }
@@ -65,13 +118,13 @@ ApplicationWindow {
             id: search
             width: 120
             anchors {
-                top: keyword.top
-                left: keyword.right
+                top: search_terms.top
+                left: search_terms.right
                 leftMargin: 20
             }
             text: "搜索"
             onClicked: {
-                backend.search(website.currentValue, keyword.text)
+                backend.search(website.currentValue, search_terms.text)
             }
         }
     }
@@ -147,6 +200,9 @@ ApplicationWindow {
                     id: qrcode
                     height: 40
                     text: "二维码"
+                    onClicked: {
+                        myPopup.open()
+                    }
                 }
 
                 Button {
@@ -162,6 +218,8 @@ ApplicationWindow {
                     id: copy_url
                     height: 40
                     text: "复制链接"
+                    onClicked: {
+                    }
                 }
             }
         }

@@ -1,17 +1,17 @@
 import json
+from urllib import parse
 
 from pyquery import PyQuery
-import requests
+from requests import get
 
 from user_agent import random_ua
 
-magnet_prefix = "magnet:?xt=urn:btih:"
 
-
-# 获取列表项的详情,不校验拼写错误(网站名都很奇怪)
+# 获取列表项的详情，不校验拼写错误(网站名都很奇怪)
 # noinspection SpellCheckingInspection
 class GetDetail:
     def __init__(self):
+        self.magnet_prefix = "magnet:?xt=urn:btih:"
         pass
 
     def is_not_used(self):
@@ -32,47 +32,55 @@ class GetDetail:
         self.btsow_shadow(item)
 
     def btsow_shadow(self, item: PyQuery):
-        self.is_not_used()
-
         magnet = item("a").attr("href")
         if magnet is None:
             return None
         name = item("a").attr("title")
         size = item(".size").text()
         time = item(".date").text()
-        magnet = magnet_prefix + magnet[-40:]
+        magnet = self.magnet_prefix + magnet[-40:]
 
         return {"name": name, "hot": "999", "size": size, "time": time, "magnet": magnet}
 
 
 def run_crawler(key, search_terms, page, sort):
     rule_name = f"rule/pro/{key}.json"
-    with open(rule_name, encoding="utf-8") as f:
-        conf = json.load(f)
 
-        search_info = ""
-        if len(sort) == 0:
-            search_info = conf["paths"]["default"].format(k=search_terms, p=page)
+    try:
+        with open(rule_name, encoding="utf-8") as f:
+            conf = json.load(f)
 
-        url = conf["url"] + search_info
+            search_info = ""
+            if len(sort) == 0:
+                search_info = conf["paths"]["default"].format(k=search_terms, p=page)
 
-        headers = {
-            # "referer": url,
-            "user-agent": random_ua()
-        }
+            url = conf["url"] + search_info
 
-        # 发送请求获取数据
-        content = requests.get(url, headers=headers)
-        doc = PyQuery(content.text)
+            headers = {
+                "referer": parse.quote(url),
+                "user-agent": random_ua()
+            }
 
-        # 解析数据列表
-        detail_func = getattr(GetDetail(), key)
-        data_list = doc(conf["selector"])
-        data_result = []
-        for item in data_list.items():
-            item(".name").text()
-            item_result = detail_func(item)
-            if item_result is not None:
-                data_result.append(item_result)
+            # 发送请求获取数据
+            content = get(url, headers=headers)
+            doc = PyQuery(content.text)
 
-    return data_result
+            # 解析数据列表
+            detail_func = getattr(GetDetail(), key)
+            data_list = doc(conf["selector"])
+            data_result = []
+            for item in data_list.items():
+                item(".name").text()
+                item_result = detail_func(item)
+                if item_result is not None:
+                    data_result.append(item_result)
+    except Exception as e:
+        # 监听到异常
+        print(e)
+        return None
+    else:
+        # 没有异常返回正确数据
+        return data_result
+    finally:
+        # 有无异常都会最终执行的操作
+        pass

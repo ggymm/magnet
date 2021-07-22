@@ -1,0 +1,1 @@
+nuitka --mingw64 --standalone --windows-disable-console --enable-plugin=pyside6 --include-qt-plugins=all --output-dir=build main.py
