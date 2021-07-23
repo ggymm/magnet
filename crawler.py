@@ -1,4 +1,5 @@
 import json
+import re
 from urllib import parse
 
 from lxml import etree
@@ -58,7 +59,6 @@ def run_crawler(key, search_terms, page, sort):
 
                     # 遍历规则处理数据
                     for sel in selector:
-
                         # xpath匹配规则
                         if sel["type"] == "xpath":
                             value = etree.HTML(item_list[index]).xpath(sel["xpath"])
@@ -87,6 +87,15 @@ def run_crawler(key, search_terms, page, sort):
                             end = len(value) if sel["end"] is None else sel["end"]
                             value = value[start:end]
 
+                        # 正则表达式匹配规则
+                        elif sel["type"] == "regex":
+                            value = re.findall(sel["regex"], value)
+                            # 匹配结果是列表
+                            if len(value) == 0:
+                                value = ""
+                            else:
+                                value = value[0]
+
                         # 没有规则，取默认值
                         elif sel["type"] is None:
                             value = sel["default"]
@@ -95,6 +104,12 @@ def run_crawler(key, search_terms, page, sort):
                     # fix: 某些链接提取后不完整
                     if key == "magnet" and magnet_head not in value:
                         value = magnet_head + value
+
+                    # fix: 移除一些错误字符
+                    if key == "name":
+                        # &nbsp
+                        value = value.replace(u'\xa0', u'')
+
                     # 保存解析后数据
                     item_data[key] = value
 
