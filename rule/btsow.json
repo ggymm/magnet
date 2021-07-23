@@ -1,14 +1,18 @@
 {
   "id": "btsow",
-  "name": "BTSOW(代理)",
-  "proxy": true,
-  "url": "https://btsow.com",
+  "name": "BTSOW",
+  "proxy": false,
+  "publish": "https://btsow.com",
+  "publishMail": "",
+  "url": "https://btsow.one",
+  "referer": "https://btsow.one",
   "params": {
     "default": "/search/{k}/page/{p}"
   },
   "parse": {
     "item": {
-      "xpath": "//div[@class='data-list']/div[@class='row']"
+      "xpath": "//div[@class='data-list']/div[@class='row']",
+      "startIndex": 0
     },
     "magnet": [
       {

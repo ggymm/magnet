@@ -1,0 +1,48 @@
+{
+  "id": "sofan",
+  "name": "搜一下",
+  "proxy": false,
+  "publish": "https://sofan.icu",
+  "publishMail": "lauchichoy@south.flyzoohotel.com.cn",
+  "url": "https://fan1.yun55.top:65533",
+  "referer": "https://fan1.yun55.top:65533/?host=a4.fan55.top",
+  "params": {
+    "default": "/s?word={k}&page={p}"
+  },
+  "parse": {
+    "item": {
+      "xpath": "//div[@class='container-fluid']//ul[@class='list-unstyled']",
+      "startIndex": 0
+    },
+    "magnet": [
+      {
+        "type": "xpath",
+        "xpath": "//ul[@class='list-unstyled']/@id"
+      }
+    ],
+    "name": [
+      {
+        "type": "xpathList",
+        "xpath": "//h3/a//text()"
+      }
+    ],
+    "hot": [
+      {
+        "type": "xpath",
+        "xpath": "//li[@class='result-resource-meta-info']/span[4]/text()"
+      }
+    ],
+    "size": [
+      {
+        "type": "xpath",
+        "xpath": "//li[@class='result-resource-meta-info']/span[1]/text()"
+      }
+    ],
+    "time": [
+      {
+        "type": "xpath",
+        "xpath": "//li[@class='result-resource-meta-info']/span[3]/text()"
+      }
+    ]
+  }
+}

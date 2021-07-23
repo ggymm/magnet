@@ -1,0 +1,46 @@
+{
+  "id": "cili",
+  "name": "无极磁链",
+  "proxy": false,
+  "publish": "https://cili.st",
+  "url": "https://6mag.net",
+  "params": {
+    "default": "/search?q=龙珠"
+  },
+  "parse": {
+    "item": {
+      "xpath": "",
+      "startIndex": 0
+    },
+    "magnet": [
+      {
+        "type": null,
+        "default": ""
+      }
+    ],
+    "name": [
+      {
+        "type": null,
+        "default": ""
+      }
+    ],
+    "hot": [
+      {
+        "type": null,
+        "default": ""
+      }
+    ],
+    "size": [
+      {
+        "type": null,
+        "default": ""
+      }
+    ],
+    "time": [
+      {
+        "type": null,
+        "default": ""
+      }
+    ]
+  }
+}

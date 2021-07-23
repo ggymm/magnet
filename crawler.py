@@ -13,32 +13,36 @@ def run_crawler(key, search_terms, page, sort):
     rule_name = f"rule/{key}.json"
 
     try:
-        with open(rule_name, encoding="utf-8") as f:
-            conf = json.load(f)
+        with open(rule_name, encoding="utf-8") as rule_json:
+            rule = json.load(rule_json)
 
             params = ""
             if len(sort) == 0:
-                params = conf["params"]["default"].format(k=search_terms, p=page)
-
-            url = conf["url"] + params
+                params = rule["params"]["default"].format(k=search_terms, p=page)
+            url = rule["url"] + params
 
             headers = {
-                "referer":    parse.quote(url),
+                "referer":    parse.quote(rule["referer"]),
                 "user-agent": random_ua()
             }
+            cookies = {}
+            if key == "yuhuage":
+                cookies['PHPSESSID'] = 'a0aqiaaejde1jttf9oj6nq1hu6'
 
             # 发送请求获取数据
-            content = get(url, headers=headers)
+            content = get(url, headers=headers, cookies=cookies)
             doc = etree.HTML(content.text)
 
             # 解析数据列表
             item_list = []
-            elem_list = doc.xpath(conf["parse"]["item"]["xpath"])
+            item_rule = rule["parse"]["item"]
+            elem_list = doc.xpath(item_rule["xpath"])
             for elem in elem_list:
                 item_list.append(etree.tostring(elem, encoding=str))
 
             data_result = []
-            for item in item_list:
+            start = item_rule["startIndex"]
+            for index in range(start, len(item_list)):
                 item_data = {
                     "magnet": "magnet",
                     "name":   "name",
@@ -50,36 +54,47 @@ def run_crawler(key, search_terms, page, sort):
                 # 按照规则解析数据
                 for key in item_data:
                     value = None
-                    rules = conf["parse"][item_data[key]]
+                    selector = rule["parse"][item_data[key]]
 
                     # 遍历规则处理数据
-                    for rule in rules:
-                        # xpath规则
-                        if rule["type"] == "xpath":
-                            value = etree.HTML(item).xpath(rule["xpath"])
+                    for sel in selector:
+
+                        # xpath匹配规则
+                        if sel["type"] == "xpath":
+                            value = etree.HTML(item_list[index]).xpath(sel["xpath"])
                             # xpath匹配结果都是列表
                             if len(value) == 0:
                                 value = value
                             else:
                                 value = value[0]
 
-                            # fix: 某些链接提取后不完整
-                            if key == "magnet" and magnet_head not in value:
-                                value = magnet_head + value
+                        # xpath列表匹配规则
+                        if sel["type"] == "xpathList":
+                            values = etree.HTML(item_list[index]).xpath(sel["xpath"])
+                            # xpath匹配结果都是列表
+                            if len(values) == 0:
+                                value = values
+                            else:
+                                value = ""
+                                for text in values:
+                                    value += text
 
                         # 字符串截取规则
-                        elif rule["type"] == "subIndex":
+                        elif sel["type"] == "subIndex":
                             # 起始和结束不设置时
                             # 需要为null值
-                            start = 0 if rule["start"] is None else rule["start"]
-                            end = len(value) if rule["end"] is None else rule["end"]
+                            start = 0 if sel["start"] is None else sel["start"]
+                            end = len(value) if sel["end"] is None else sel["end"]
                             value = value[start:end]
 
                         # 没有规则，取默认值
-                        elif rule["type"] is None:
-                            value = rule["default"]
+                        elif sel["type"] is None:
+                            value = sel["default"]
                             break
 
+                    # fix: 某些链接提取后不完整
+                    if key == "magnet" and magnet_head not in value:
+                        value = magnet_head + value
                     # 保存解析后数据
                     item_data[key] = value
 

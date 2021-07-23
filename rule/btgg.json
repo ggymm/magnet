@@ -2,13 +2,17 @@
   "id": "btgg",
   "name": "BTGG",
   "proxy": false,
+  "publish": "",
+  "publishMail": "",
   "url": "https://www.btgg.in",
+  "referer": "https://www.btgg.in",
   "params": {
     "default": "/search?q={k}&p={p}"
   },
   "parse": {
     "item": {
-      "xpath": "//div[@class='list']/div[@class='item']"
+      "xpath": "//div[@class='list']/div[@class='item']",
+      "startIndex": 0
     },
     "magnet": [
       {

@@ -1,0 +1,48 @@
+{
+  "id": "",
+  "name": "",
+  "proxy": false,
+  "publish": "",
+  "publishMail": "",
+  "url": "",
+  "referer": "",
+  "params": {
+    "default": ""
+  },
+  "parse": {
+    "item": {
+      "xpath": "",
+      "startIndex": 0
+    },
+    "magnet": [
+      {
+        "type": null,
+        "default": ""
+      }
+    ],
+    "name": [
+      {
+        "type": null,
+        "default": ""
+      }
+    ],
+    "hot": [
+      {
+        "type": null,
+        "default": ""
+      }
+    ],
+    "size": [
+      {
+        "type": null,
+        "default": ""
+      }
+    ],
+    "time": [
+      {
+        "type": null,
+        "default": ""
+      }
+    ]
+  }
+}
