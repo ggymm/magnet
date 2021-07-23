@@ -1,6 +1,6 @@
 from crawler import run_crawler
 
-key = "sofan"
+key = "bt113"
 search_terms = "龙珠"
 page = 1
 sort = ""

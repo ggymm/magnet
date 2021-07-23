@@ -1,0 +1,48 @@
+{
+  "id": "bt113",
+  "name": "磁力多",
+  "proxy": false,
+  "publish": "https://bt113.com",
+  "publishMail": "",
+  "url": "https://duo1.dns33.top:39988",
+  "referer": "https://duo1.dns33.top:39988/?host=duo22.win",
+  "params": {
+    "default": "/search-{k}-rel-{p}.html"
+  },
+  "parse": {
+    "item": {
+      "xpath": "//div[@class='p-wrapper']/div[5]/div[@class='ssbox']",
+      "startIndex": 0
+    },
+    "magnet": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='sbar']//a/@href"
+      }
+    ],
+    "name": [
+      {
+        "type": "xpathList",
+        "xpath": "//h3/a//text()"
+      }
+    ],
+    "hot": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='sbar']/span[5]/b/text()"
+      }
+    ],
+    "size": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='sbar']/span[3]/b/text()"
+      }
+    ],
+    "time": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='sbar']/span[2]/b/text()"
+      }
+    ]
+  }
+}

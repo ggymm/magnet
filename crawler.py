@@ -64,7 +64,7 @@ def run_crawler(key, search_terms, page, sort):
                             value = etree.HTML(item_list[index]).xpath(sel["xpath"])
                             # xpath匹配结果都是列表
                             if len(value) == 0:
-                                value = value
+                                value = ""
                             else:
                                 value = value[0]
 
@@ -73,7 +73,7 @@ def run_crawler(key, search_terms, page, sort):
                             values = etree.HTML(item_list[index]).xpath(sel["xpath"])
                             # xpath匹配结果都是列表
                             if len(values) == 0:
-                                value = values
+                                value = ""
                             else:
                                 value = ""
                                 for text in values:
