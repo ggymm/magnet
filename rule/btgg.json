@@ -1,17 +1,54 @@
 {
-  "id": "btgg", 
-  "name": "BTGG", 
-  "paths": {
-    "preset": "/search?q={k}&p={p}"
-  }, 
-  "proxy": false, 
-  "url": "https://www.btgg.in", 
-  "xpath": {
-    "date": "./div[2]/span[3]", 
-    "group": "//div[@class=\"item\"]", 
-    "hot": "./div[2]/span[2]", 
-    "magnet": "./div[2]/a/@href", 
-    "name": "./div[1]/a", 
-    "size": "./div[2]/span[1]"
+  "id": "btgg",
+  "name": "BTGG",
+  "proxy": false,
+  "url": "https://www.btgg.in",
+  "params": {
+    "default": "/search?q={k}&p={p}"
+  },
+  "parse": {
+    "item": {
+      "xpath": "//div[@class='list']/div[@class='item']"
+    },
+    "magnet": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='meta']/a/@href"
+      }
+    ],
+    "name": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='name']/a/text()"
+      }
+    ],
+    "hot": [
+      {
+        "type": null,
+        "default": 99
+      }
+    ],
+    "size": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='meta']/span[1]/text()"
+      },
+      {
+        "type": "subIndex",
+        "start": 0,
+        "end": -2
+      }
+    ],
+    "time": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='meta']/span[3]/text()"
+      },
+      {
+        "type": "subIndex",
+        "start": 0,
+        "end": -2
+      }
+    ]
   }
 }

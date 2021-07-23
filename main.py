@@ -24,10 +24,10 @@ class QDataListModel(QAbstractListModel):
 
     def roleNames(self):
         return {
-            self.NAME: b"name",
-            self.TIME: b"time",
-            self.SIZE: b"size",
-            self.HOT: b"hot",
+            self.NAME:   b"name",
+            self.TIME:   b"time",
+            self.SIZE:   b"size",
+            self.HOT:    b"hot",
             self.MAGNET: b"magnet",
         }
 

@@ -1,0 +1,19 @@
+{
+  "id": "btsow", 
+  "name": "BTSOW", 
+  "paths": {
+    "preset": "/search/{k}/page/{p}"
+  }, 
+  "proxy": false, 
+  "url": "https://btsow.cam", 
+  "xpath": {
+    "date": "./div[2]", 
+    "detail": {
+      "files": "//div[@class=\"detail data-list\"]/div/text()"
+    }, 
+    "group": "//div[@class='row']", 
+    "magnet": "./a/@href", 
+    "name": "./a/div[1]", 
+    "size": "./div[1]"
+  }
+}

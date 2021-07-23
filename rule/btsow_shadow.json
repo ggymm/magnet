@@ -1,8 +1,8 @@
 {
-  "id": "btsow",
-  "name": "BTSOW(代理)",
-  "proxy": true,
-  "url": "https://btsow.com",
+  "id": "btsow_shadow",
+  "name": "BTSOW(非代理)",
+  "proxy": false,
+  "url": "https://btsow.one",
   "params": {
     "default": "/search/{k}/page/{p}"
   },

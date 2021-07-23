@@ -52,8 +52,8 @@ ApplicationWindow {
         id: myPopup
         x: (main.width-width)/2
         y: (main.height-height)/2
-        width: 400
-        height: 300
+        width: 360
+        height: 360
     }
 
      menuBar: MenuBar {
@@ -64,12 +64,19 @@ ApplicationWindow {
                 onTriggered: console.log("加载规则文件");
             }
             MenuItem {
-                text: "设置"
-                onTriggered: console.log("加载规则文件");
-            }
-            MenuItem {
                 text: "退出"
                 onTriggered: Qt.quit();
+            }
+        }
+        Menu {
+            title: "设置"
+            MenuItem {
+                text: "抓取设置"
+                onTriggered: console.log("抓取设置");
+            }
+            MenuItem {
+                text: "代理设置"
+                onTriggered: console.log("设置代理");
             }
         }
         Menu {

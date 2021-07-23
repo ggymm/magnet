@@ -14,24 +14,25 @@ def gen_rules():
     with open("rule.json", encoding="utf-8") as f:
         rule_list = json.load(f)
         for rule in rule_list:
-            fp = codecs.open("../rule/" + rule["id"] + ".json", "w", "utf-8")
-            fp.write(json.dumps(rule, ensure_ascii=False, sort_keys=True, indent=2, separators=(", ", ": ")))
+            fp = codecs.open("../rule/resource/" + rule["id"] + ".json", "w", "utf-8")
+            fp.write(json.dumps(rule, ensure_ascii=False, sort_keys=False, indent=2, separators=(", ", ": ")))
 
 
 # 生成UI结构
 def gen_list_model():
-    file_path = "../rule/pro"
+    file_path = "../rule"
     file_list = os.listdir(file_path)
 
     model_str = ""
     for file in file_list:
-        with open(file_path + "/" + file, encoding="utf-8") as f:
-            rule_obj = json.load(f)
-            model_str += """
-    ListElement {
-        key: "%s"
-        value: "%s"
-    }""" % (rule_obj["id"], rule_obj["name"])
+        if os.path.isfile(file_path + "/" + file):
+            with open(file_path + "/" + file, encoding="utf-8") as f:
+                rule_obj = json.load(f)
+                model_str += """
+        ListElement {
+            key: "%s"
+            value: "%s"
+        }""" % (rule_obj["id"], rule_obj["name"])
 
     print(model_str)
 
