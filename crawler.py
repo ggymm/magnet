@@ -14,24 +14,21 @@ def run_crawler(key, search_terms, page, sort):
     rule_name = f"rule/{key}.json"
 
     try:
-        with open(rule_name, encoding="utf-8") as rule_json:
+        with open(rule_name, encoding = "utf-8") as rule_json:
             rule = json.load(rule_json)
 
             params = ""
             if len(sort) == 0:
-                params = rule["params"]["default"].format(k=search_terms, p=page)
+                params = rule["params"]["default"].format(k = search_terms, p = page)
             url = rule["url"] + params
 
             headers = {
                 "referer":    parse.quote(rule["referer"]),
                 "user-agent": random_ua()
             }
-            cookies = {}
-            if key == "yuhuage":
-                cookies['PHPSESSID'] = 'a0aqiaaejde1jttf9oj6nq1hu6'
 
             # 发送请求获取数据
-            content = get(url, headers=headers, cookies=cookies)
+            content = get(url, headers = headers)
             doc = etree.HTML(content.text)
 
             # 解析数据列表
@@ -39,7 +36,7 @@ def run_crawler(key, search_terms, page, sort):
             item_rule = rule["parse"]["item"]
             elem_list = doc.xpath(item_rule["xpath"])
             for elem in elem_list:
-                item_list.append(etree.tostring(elem, encoding=str))
+                item_list.append(etree.tostring(elem, encoding = str))
 
             data_result = []
             start = item_rule["startIndex"]

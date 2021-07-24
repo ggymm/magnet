@@ -15,6 +15,8 @@ ApplicationWindow {
 
     Material.theme: Material.Dark
 
+    property variant list_pro: true
+
     Connections {
         target : backend
         function onLoadStateChanged(state) {
@@ -29,10 +31,22 @@ ApplicationWindow {
     }
 
     ListModel {
+        id: website_list_pro
+        ListElement {
+            key: "btsow"
+            value: "BTSOW(优)"
+        }
+        ListElement {
+            key: "btsow_proxy"
+            value: "BTSOW(优)(代理)"
+        }
+    }
+
+    ListModel {
         id: website_list
         ListElement {
-            key: "all"
-            value: "聚合搜索"
+            key: "bt113"
+            value: "磁力多"
         }
         ListElement {
             key: "btgg"
@@ -40,20 +54,38 @@ ApplicationWindow {
         }
         ListElement {
             key: "btsow"
-            value: "BTSOW(代理)"
+            value: "BTSOW(优)"
         }
         ListElement {
-            key: "btsow_shadow"
-            value: "BTSOW(非代理)"
+            key: "btsow_proxy"
+            value: "BTSOW(优)(代理)"
+        }
+        ListElement {
+            key: "cili"
+            value: "无极磁链"
+        }
+        ListElement {
+            key: "cursor"
+            value: "吃力网"
+        }
+        ListElement {
+            key: "sofan"
+            value: "搜一下"
         }
     }
 
     Popup {
-        id: myPopup
+        id: qr_code_popup
         x: (main.width-width)/2
         y: (main.height-height)/2
         width: 360
         height: 360
+
+        Image {
+            id: qr_code
+            anchors.fill: parent
+            cache: false
+        }
     }
 
      menuBar: MenuBar {
@@ -62,6 +94,20 @@ ApplicationWindow {
             MenuItem {
                 text: "加载规则文件"
                 onTriggered: console.log("加载规则文件");
+            }
+            MenuItem {
+                id: list_pro_ctrl
+                text: "只加载优质代理"
+                onTriggered: {
+                    if (list_pro) {
+                        website.model = website_list_pro
+                        list_pro_ctrl.text = "加载全部代理"
+                    } else {
+                        website.model = website_list
+                        list_pro_ctrl.text = "只加载优质代理"
+                    }
+                    list_pro = !list_pro
+                }
             }
             MenuItem {
                 text: "退出"
@@ -208,7 +254,8 @@ ApplicationWindow {
                     height: 40
                     text: "二维码"
                     onClicked: {
-                        myPopup.open()
+                        qr_code.source = backend.magnet_qr_code(model.magnet)
+                        qr_code_popup.open()
                     }
                 }
 

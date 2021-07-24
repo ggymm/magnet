@@ -1,9 +1,12 @@
+import base64
+import io
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
 from PySide6.QtCore import QAbstractListModel, Qt, QModelIndex, QObject, Slot, Property, Signal, QCoreApplication
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
+from qrcode import QRCode, constants
 
 from crawler import run_crawler
 
@@ -19,7 +22,7 @@ class QDataListModel(QAbstractListModel):
         QAbstractListModel.__init__(self)
         self.model = model
 
-    def rowCount(self, parent=None) -> int:
+    def rowCount(self, parent = None) -> int:
         return len(self.model)
 
     def roleNames(self):
@@ -56,6 +59,24 @@ class MainWindow(QObject):
             # noinspection PyUnresolvedReferences
             self.loadStateChanged.emit("loaded")
 
+    @Slot(str, result = str)
+    def magnet_qr_code(self, magnet):
+        qr = QRCode(
+            version = 1,
+            error_correction = constants.ERROR_CORRECT_L,
+            box_size = 10,
+            border = 1,
+        )
+        qr.make(fit = True)
+        qr.add_data(magnet)
+        qr_img = qr.make_image()
+
+        buf = io.BytesIO()
+        qr_img.save(buf, format = 'PNG')
+        image_stream = buf.getvalue()
+
+        return f'data:image/png;base64,{base64.b64encode(image_stream).decode()}'
+
     @Slot(str, str)
     def search(self, key, search_terms):
         # 提交任务
@@ -67,7 +88,7 @@ class MainWindow(QObject):
     loadStateChanged = Signal(str)
 
     # 绑定QML数据
-    @Property(QObject, constant=False, notify=loadStateChanged)
+    @Property(QObject, constant = False, notify = loadStateChanged)
     def search_result_list(self):
         return self._search_result_list
 

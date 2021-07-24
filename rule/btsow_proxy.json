@@ -1,6 +1,6 @@
 {
   "id": "btsow_proxy",
-  "name": "BTSOW(代理)",
+  "name": "BTSOW(优)(代理)",
   "proxy": true,
   "publish": "https://btsow.com",
   "publishMail": "",
