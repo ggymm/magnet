@@ -15,12 +15,13 @@ ApplicationWindow {
 
     Material.theme: Material.Dark
 
-    property variant list_pro: true
-
     Connections {
         target : backend
         function onLoadStateChanged(state) {
-            if (state === "loading") {
+            if (state === "error") {
+                message_info.text = "加载错误，请稍后重试"
+                message_timer.start()
+            } else if (state === "loading") {
                 search.text = "正在加载数据"
                 search.enabled = false
             } else if (state === "loaded") {
@@ -29,6 +30,8 @@ ApplicationWindow {
             }
         }
     }
+
+    property variant list_pro: true
 
     ListModel {
         id: website_list_pro
@@ -70,22 +73,71 @@ ApplicationWindow {
         }
         ListElement {
             key: "sofan"
-            value: "搜一下"
+            value: "搜番"
         }
     }
 
     Popup {
         id: qr_code_popup
-        x: (main.width-width)/2
-        y: (main.height-height)/2
+        anchors.centerIn: parent
         width: 360
         height: 360
-
         Image {
             id: qr_code
             anchors.fill: parent
             cache: false
         }
+    }
+
+    property int message_show: 3
+
+    Popup {
+        id: message_popup
+        x: (main.width-width)/2
+        y: 0
+        width: 200
+        height: 36
+        enter: Transition {
+            PropertyAnimation {
+                property: "y"
+                to: 36
+                duration: 200
+            }
+        }
+        exit: Transition {
+            PropertyAnimation {
+                property: "y"
+                to: 0
+                duration: 200
+            }
+        }
+        Label {
+            id: message_info
+            anchors.centerIn: parent
+            font.pointSize: 10
+            text: "消息提示"
+        }
+    }
+
+    Timer {
+        id: message_timer
+        interval: 1000
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: {
+            if (message_show == 3) {
+                message_popup.open()
+            }
+            message_show -= 1
+            if (message_show == 0) {
+                message_show = 3
+                message_timer.stop()
+                message_popup.close()
+            }
+        }
+    }
+
+    Window {
     }
 
      menuBar: MenuBar {
@@ -141,7 +193,6 @@ ApplicationWindow {
     Item {
         id: search_info
         height: 80
-
         ComboBox {
             id: website
             x: 40
@@ -150,9 +201,7 @@ ApplicationWindow {
             model: website_list
             textRole: "value"
             valueRole: "key"
-            currentIndex: 1
         }
-
         TextField {
             id: search_terms
             text: "龙珠"
@@ -166,7 +215,6 @@ ApplicationWindow {
             placeholderText: "搜索词"
             font.pointSize: 12
         }
-
         Button {
             id: search
             width: 120
@@ -204,35 +252,29 @@ ApplicationWindow {
         delegate: Item {
             width: main.width - 80
             height: 80
-
             Column {
                 id: info
                 anchors {
                     left: parent.left
                     verticalCenter: parent.verticalCenter
                 }
-
                 Label {
                     text: model.name
                     font.pixelSize: 16
                     bottomPadding: 20
                 }
-
                 Row {
                     spacing: 20
-
                     Label {
                         text: "热度: " + model.hot
                         color: "gray"
                         font.pixelSize: 12
                     }
-
                     Label {
                         text: "文件大小: " + model.size
                         color: "gray"
                         font.pixelSize: 12
                     }
-
                     Label {
                         text: "创建时间: " + model.time
                         color: "gray"
@@ -248,7 +290,6 @@ ApplicationWindow {
                     verticalCenter: parent.verticalCenter
                 }
                 spacing: 20
-
                 Button {
                     id: qrcode
                     height: 40
@@ -258,7 +299,6 @@ ApplicationWindow {
                         qr_code_popup.open()
                     }
                 }
-
                 Button {
                     id: download
                     height: 40
@@ -267,12 +307,14 @@ ApplicationWindow {
                         backend.download(model.magnet)
                     }
                 }
-
                 Button {
                     id: copy_url
                     height: 40
                     text: "复制链接"
                     onClicked: {
+                        backend.copy_to_clipboard(model.magnet)
+                        message_info.text = "复制成功"
+                        message_timer.start()
                     }
                 }
             }

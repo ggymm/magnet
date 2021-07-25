@@ -42,8 +42,9 @@ class QDataListModel(QAbstractListModel):
 
 
 class MainWindow(QObject):
-    def __init__(self):
+    def __init__(self, app: QGuiApplication):
         QObject.__init__(self)
+        self._app = app
         self._pool = ThreadPoolExecutor()
         self._search_result_list = QDataListModel([])
 
@@ -51,7 +52,7 @@ class MainWindow(QObject):
         if future.result() is None:
             # 通知页面数据加载失败（忽视编辑器莫名其妙的警告）
             # noinspection PyUnresolvedReferences
-            self.loadStateChanged.emit("loaded")
+            self.loadStateChanged.emit("error")
         else:
             self._search_result_list = QDataListModel(future.result())
 
@@ -76,6 +77,11 @@ class MainWindow(QObject):
         image_stream = buf.getvalue()
 
         return f'data:image/png;base64,{base64.b64encode(image_stream).decode()}'
+
+    @Slot(str)
+    def copy_to_clipboard(self, magnet):
+        cb = self._app.clipboard()
+        cb.setText(magnet)
 
     @Slot(str, str)
     def search(self, key, search_terms):
@@ -104,7 +110,7 @@ def main():
     engine = QQmlApplicationEngine()
 
     # 绑定视图
-    backend = MainWindow()
+    backend = MainWindow(app)
     engine.rootContext().setContextProperty("backend", backend)
     engine.load("main.qml")
 
