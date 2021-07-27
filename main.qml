@@ -1,11 +1,12 @@
 import QtQuick 6
 import QtQuick.Window 2.5
 import QtQuick.Controls 2.5
+import QtQuick.Layouts 2.5
 import QtQuick.Controls.Material 2.5
 
 ApplicationWindow {
     id: main
-    title: "磁力链接搜索"
+    title: qsTr("磁力链接搜索")
     width: 1280
     height: 720
     minimumWidth: 960
@@ -19,6 +20,8 @@ ApplicationWindow {
         target : backend
         function onLoadStateChanged(state) {
             if (state === "error") {
+                search.text = "搜索"
+                search.enabled = true
                 message_info.text = "加载错误，请稍后重试"
                 message_timer.start()
             } else if (state === "loading") {
@@ -115,7 +118,7 @@ ApplicationWindow {
             id: message_info
             anchors.centerIn: parent
             font.pointSize: 10
-            text: "消息提示"
+            text: qsTr("消息提示")
         }
     }
 
@@ -137,19 +140,118 @@ ApplicationWindow {
         }
     }
 
-    Window {
+    ApplicationWindow {
+        id: proxy_window
+        title: qsTr("代理设置")
+        width: 400
+        height: 200
+        minimumWidth: 400
+        minimumHeight: 200
+        flags: Qt.Dialog
+        modality: Qt.WindowModal
+
+        Material.theme: Material.Dark
+        visible: false
+
+        Component.onCompleted: {
+            console.log("请求后台数据")
+        }
+
+        GridLayout {
+            columns: 2
+            anchors.fill: parent
+            anchors.margins: 20
+            rowSpacing: 10
+            columnSpacing: 20
+            Label {
+                text: qsTr("代理服务地址")
+            }
+            TextField {
+                id: proxy_server
+                Layout.fillWidth: true
+                hoverEnabled: false
+                selectByMouse: true
+            }
+
+            Label {
+                text: qsTr("代理服务端口号")
+            }
+            TextField {
+                id: proxy_port
+                Layout.fillWidth: true
+                hoverEnabled: false
+                selectByMouse: true
+                validator: IntValidator {
+                    bottom: 0
+                    top: 65535
+                }
+            }
+            Item {
+                Layout.columnSpan: 2
+                Layout.fillWidth: true
+                implicitHeight: 10
+                Label {
+                    id: test_result
+                    text: ""
+                    anchors.centerIn: parent
+                }
+            }
+            Item {
+                Layout.columnSpan: 2
+                Layout.fillWidth: true
+                implicitHeight: 40
+                Row {
+                    anchors.centerIn: parent
+                    spacing: 20
+                    Button {
+                        id: test_proxy
+                        width: 120
+                        height: 40
+                        text: qsTr("测试代理")
+                        onClicked: {
+                            let state = backend.test_proxy(proxy_server.text, proxy_port.text)
+                            if (state === "success") {
+                                test_result.text = "测试成功, 代理设置正确"
+                                test_result.color = "#4CAF50"
+                            } else if (state === "failed") {
+                                test_result.text = "测试失败, 代理设置不正确"
+                                test_result.color = "#F44336"
+                            }
+                        }
+                    }
+                    Button {
+                        id: save_proxy
+                        width: 60
+                        height: 40
+                        text: qsTr("保存")
+                        onClicked: {
+                            proxy_window.close()
+                        }
+                    }
+                    Button {
+                        id: save_proxy1
+                        width: 60
+                        height: 40
+                        text: qsTr("取消")
+                        onClicked: {
+                            proxy_window.close()
+                        }
+                    }
+                }
+            }
+        }
     }
 
-     menuBar: MenuBar {
+    menuBar: MenuBar {
         Menu {
-            title: "磁力链接搜索"
+            title: qsTr("磁力链接搜索")
             MenuItem {
-                text: "加载规则文件"
-                onTriggered: console.log("加载规则文件");
+                text: qsTr("加载规则文件")
+                onTriggered: console.log("加载规则文件")
             }
             MenuItem {
                 id: list_pro_ctrl
-                text: "只加载优质代理"
+                text: qsTr("只加载优质代理")
                 onTriggered: {
                     if (list_pro) {
                         website.model = website_list_pro
@@ -163,29 +265,39 @@ ApplicationWindow {
             }
             MenuItem {
                 text: "退出"
-                onTriggered: Qt.quit();
+                onTriggered: Qt.quit()
             }
         }
         Menu {
-            title: "设置"
+            title: qsTr("设置")
             MenuItem {
-                text: "抓取设置"
-                onTriggered: console.log("抓取设置");
+                text: qsTr("代理服务设置")
+                onTriggered: {
+                    proxy_window.visible = true
+                }
             }
             MenuItem {
-                text: "代理设置"
-                onTriggered: console.log("设置代理");
+                text: qsTr("编辑搜索规则")
+                onTriggered: {
+
+                }
+            }
+            MenuItem {
+                text: qsTr("搜索设置")
+                onTriggered: {
+
+                }
             }
         }
         Menu {
-            title: "帮助"
+            title: qsTr("帮助")
             MenuItem {
-                text: "使用手册"
-                onTriggered: console.log("打开网页");
+                text: qsTr("使用手册")
+                onTriggered: console.log("打开网页")
             }
             MenuItem {
-                text: "关于"
-                onTriggered: console.log("检查更新等");
+                text: qsTr("关于")
+                onTriggered: console.log("检查更新等")
             }
         }
     }
@@ -204,7 +316,7 @@ ApplicationWindow {
         }
         TextField {
             id: search_terms
-            text: "龙珠"
+            text: qsTr("龙珠")
             width: 520
             anchors {
                 top: website.top
@@ -212,7 +324,8 @@ ApplicationWindow {
                 leftMargin: 20
             }
             hoverEnabled: false
-            placeholderText: "搜索词"
+            selectByMouse: true
+            placeholderText: qsTr("搜索词")
             font.pointSize: 12
         }
         Button {
@@ -223,7 +336,7 @@ ApplicationWindow {
                 left: search_terms.right
                 leftMargin: 20
             }
-            text: "搜索"
+            text: qsTr("搜索")
             onClicked: {
                 backend.search(website.currentValue, search_terms.text)
             }
@@ -266,17 +379,17 @@ ApplicationWindow {
                 Row {
                     spacing: 20
                     Label {
-                        text: "热度: " + model.hot
+                        text: qsTr("热度: ") + model.hot
                         color: "gray"
                         font.pixelSize: 12
                     }
                     Label {
-                        text: "文件大小: " + model.size
+                        text: qsTr("文件大小: ") + model.size
                         color: "gray"
                         font.pixelSize: 12
                     }
                     Label {
-                        text: "创建时间: " + model.time
+                        text: qsTr("创建时间: ") + model.time
                         color: "gray"
                         font.pixelSize: 12
                     }
@@ -293,7 +406,7 @@ ApplicationWindow {
                 Button {
                     id: qrcode
                     height: 40
-                    text: "二维码"
+                    text: qsTr("二维码")
                     onClicked: {
                         qr_code.source = backend.magnet_qr_code(model.magnet)
                         qr_code_popup.open()
@@ -302,7 +415,7 @@ ApplicationWindow {
                 Button {
                     id: download
                     height: 40
-                    text: "迅雷下载"
+                    text: qsTr("迅雷下载")
                     onClicked: {
                         backend.download(model.magnet)
                     }
@@ -310,7 +423,7 @@ ApplicationWindow {
                 Button {
                     id: copy_url
                     height: 40
-                    text: "复制链接"
+                    text: qsTr("复制链接")
                     onClicked: {
                         backend.copy_to_clipboard(model.magnet)
                         message_info.text = "复制成功"

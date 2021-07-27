@@ -4,8 +4,8 @@
   "proxy": false,
   "publish": "https://cursor.vip/vip",
   "publishMail": "",
-  "url": "https://www.sokankan109.xyz",
-  "referer": "https://www.sokankan109.xyz",
+  "url": "https://www.sokankan.cc",
+  "referer": "https://www.sokankan.cc",
   "params": {
     "default": "/search/{k}/page-{p}.html"
   },
