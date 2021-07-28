@@ -97,7 +97,7 @@ class MainWindow(QObject):
         buf = io.BytesIO()
         qr_img.save(buf, format = 'PNG')
         image_stream = buf.getvalue()
-
+        buf.close()
         return f'data:image/png;base64,{base64.b64encode(image_stream).decode()}'
 
     @Slot(str)

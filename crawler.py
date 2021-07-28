@@ -1,11 +1,11 @@
+import gc
 import json
 import re
 from urllib import parse
 
 from loguru import logger
 from lxml import etree
-from requests import get, Session
-from requests.adapters import HTTPAdapter
+from requests import get
 
 from user_agent import random_ua
 
