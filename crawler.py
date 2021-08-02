@@ -1,6 +1,6 @@
-import gc
 import json
 import re
+import sys
 from urllib import parse
 
 from loguru import logger
@@ -12,7 +12,7 @@ from user_agent import random_ua
 magnet_head = 'magnet:?xt=urn:btih:'
 
 
-def run_crawler(key, search_terms, page, sort):
+def run_crawler(key: str, search_terms: str, page: int, sort: str):
     rule_name = f'rule/{key}.json'
     logger.info('搜索任务开始执行')
     logger.info(f'文件名称: {rule_name}, 搜索词: {search_terms}, 页数: {page}, 排序规则: {sort}')
@@ -28,23 +28,42 @@ def run_crawler(key, search_terms, page, sort):
             logger.info(f'搜索网址: {url}')
 
             headers = {
-                'referer':    parse.quote(rule['referer']),
-                'user-agent': random_ua()
+                "Accept":          "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                'referer':         parse.quote(rule['referer']),
+                'user-agent':      random_ua()
             }
 
+            proxies = {'http': 'http://127.0.0.1:9910', 'https': 'http://127.0.0.1:9910', }
+
             # 发送请求获取数据
-            content = get(url, timeout = 10, headers = headers)
+            content = get(url, timeout = 10, headers = headers, proxies = proxies)
             doc = etree.HTML(content.text)
 
+            # 获取页数
+            page_xpath = rule['parse']['page']
+            if len(page_xpath) == 0:
+                page_num = 0
+            else:
+                page_elem = doc.xpath(page_xpath)
+                if len(page_elem) == 0:
+                    page_num = 0
+                else:
+                    page_num = int(page_elem[0])
+
+            data_result = []
             # 解析数据列表
             item_list = []
             item_rule = rule['parse']['item']
-            elem_list = doc.xpath(item_rule['xpath'])
-            for elem in elem_list:
-                item_list.append(etree.tostring(elem, encoding = str))
+            if item_rule["type"] == "xpath":
+                elem_list = doc.xpath(item_rule['xpath'])
+                for elem in elem_list:
+                    item_list.append(etree.tostring(elem, encoding = str))
+            elif item_rule["type"] == "url":
+                pass
             logger.info(f'结果列表: {item_list}')
 
-            data_result = []
             start = item_rule['startIndex']
             for index in range(start, len(item_list)):
                 item_data = {
@@ -119,13 +138,15 @@ def run_crawler(key, search_terms, page, sort):
                 data_result.append(item_data)
     except Exception as e:
         # 监听到异常
-        logger.error(f'出现异常, {e}')
+        logger.error(f'出现异常, {e.with_traceback(sys.exc_info()[2])}')
         return None
     else:
         # 没有异常返回正确数据
         logger.success(f'解析后结果列表: {data_result}')
-        return data_result
+        return {
+            "page": page_num,
+            "list": data_result
+        }
     finally:
         # 有无异常都会最终执行的操作
         logger.info('搜索任务执行完毕')
-        pass

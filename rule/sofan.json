@@ -10,7 +10,9 @@
     "default": "/s?word={k}&page={p}"
   },
   "parse": {
+    "page": "",
     "item": {
+      "type": "xpath",
       "xpath": "//div[@class='container-fluid']//ul[@class='list-unstyled']",
       "startIndex": 0
     },

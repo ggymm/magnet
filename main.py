@@ -2,7 +2,7 @@ import base64
 import io
 import re
 import sys
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import Future, ThreadPoolExecutor
 
 from PySide6.QtCore import QAbstractListModel, Qt, QModelIndex, QObject, Slot, Property, Signal
 from PySide6.QtGui import QGuiApplication
@@ -52,7 +52,7 @@ class MainWindow(QObject):
         self._app = app
         self._config = config
         self._pool = ThreadPoolExecutor()
-        self._search_result_list = QDataListModel([])
+        self._search_result_model = QDataListModel([])
 
     @Slot(str, int, result = str)
     def test_proxy(self, server, port):
@@ -84,12 +84,7 @@ class MainWindow(QObject):
     @Slot(str, result = str)
     def magnet_qr_code(self, magnet):
         logger.info(f'生成二维码: {magnet}')
-        qr = QRCode(
-            version = 1,
-            error_correction = constants.ERROR_CORRECT_L,
-            box_size = 10,
-            border = 1,
-        )
+        qr = QRCode()
         qr.make(fit = True)
         qr.add_data(magnet)
         qr_img = qr.make_image()
@@ -116,29 +111,29 @@ class MainWindow(QObject):
         if future.result() is None:
             # 通知页面数据加载失败（忽视编辑器莫名其妙的警告）
             # noinspection PyUnresolvedReferences
-            self.loadStateChanged.emit('error')
+            self.loadStateChanged.emit('error', 0)
         else:
-            self._search_result_list = QDataListModel(future.result())
-
+            result = future.result()
+            self._search_result_model = QDataListModel(result["list"])
             # 通知页面数据加载完成（忽视编辑器莫名其妙的警告）
             # noinspection PyUnresolvedReferences
-            self.loadStateChanged.emit('loaded')
+            self.loadStateChanged.emit('loaded', result["page"])
 
-    @Slot(str, str)
-    def search(self, key, search_terms):
-        logger.info(f'提交搜索任务, 网站规则: {key}, 搜索词: {search_terms}')
+    @Slot(str, str, int)
+    def search(self, key, search_terms, page):
+        logger.info(f'提交搜索任务, 网站规则: {key}, 搜索词: {search_terms}, 页数: {page}')
         # 提交任务
-        self._pool.submit(run_crawler, key, search_terms, '1', '').add_done_callback(self.search_done)
+        self._pool.submit(run_crawler, key, search_terms, page, '').add_done_callback(self.search_done)
         # 通知页面处于加载状态（忽视编辑器莫名其妙的警告）
         # noinspection PyUnresolvedReferences
-        self.loadStateChanged.emit('loading')
+        self.loadStateChanged.emit('loading', 0)
 
-    loadStateChanged = Signal(str)
+    loadStateChanged = Signal(str, int)
 
     # 绑定QML数据
     @Property(QObject, constant = False, notify = loadStateChanged)
-    def search_result_list(self):
-        return self._search_result_list
+    def search_result_model(self):
+        return self._search_result_model
 
 
 def main():
@@ -157,7 +152,7 @@ def main():
     # 绑定视图
     backend = MainWindow(app, Config())
     engine.rootContext().setContextProperty('backend', backend)
-    engine.load('qrc:/main.qml')
+    engine.load('main.qml')
 
     if not engine.rootObjects():
         return -1

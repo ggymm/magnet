@@ -1,16 +1,18 @@
 {
   "id": "cursor",
-  "name": "吃力网",
+  "name": "光标网",
   "proxy": false,
   "publish": "https://cursor.vip/vip",
   "publishMail": "",
-  "url": "https://www.sokankan.cc",
-  "referer": "https://www.sokankan.cc",
+  "url": "https://www.sokankan94.cc",
+  "referer": "https://www.sokankan94.cc",
   "params": {
     "default": "/search/{k}/page-{p}.html"
   },
   "parse": {
+    "page": "",
     "item": {
+      "type": "xpath",
       "xpath": "//div[@class='list-view']/article[@class='item'  and @data-key]",
       "startIndex": 0
     },

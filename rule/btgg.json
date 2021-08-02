@@ -1,16 +1,18 @@
 {
   "id": "btgg",
-  "name": "BTGG",
-  "proxy": false,
+  "name": "BTGG（代理）",
+  "proxy": true,
   "publish": "",
   "publishMail": "",
-  "url": "https://www.btgg.in",
-  "referer": "https://www.btgg.in",
+  "url": "https://www.btgg.cc",
+  "referer": "https://www.btgg.cc",
   "params": {
     "default": "/search?q={k}&p={p}"
   },
   "parse": {
+    "page": "",
     "item": {
+      "type": "xpath",
       "xpath": "//div[@class='list']/div[@class='item']",
       "startIndex": 0
     },

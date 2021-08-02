@@ -10,37 +10,39 @@
     "default": ""
   },
   "parse": {
+    "page": "",
     "item": {
+      "type": "",
       "xpath": "",
       "startIndex": 0
     },
     "magnet": [
       {
-        "type": null,
+        "type": "",
         "default": ""
       }
     ],
     "name": [
       {
-        "type": null,
+        "type": "",
         "default": ""
       }
     ],
     "hot": [
       {
-        "type": null,
+        "type": "",
         "default": ""
       }
     ],
     "size": [
       {
-        "type": null,
+        "type": "",
         "default": ""
       }
     ],
     "time": [
       {
-        "type": null,
+        "type": "",
         "default": ""
       }
     ]

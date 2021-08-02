@@ -1,6 +1,6 @@
 {
   "id": "btsow",
-  "name": "BTSOW(优)",
+  "name": "BTSOW（优）",
   "proxy": false,
   "publish": "https://btsow.com",
   "publishMail": "",
@@ -10,7 +10,9 @@
     "default": "/search/{k}/page/{p}"
   },
   "parse": {
+    "page": "//ul[contains(@class,'pagination')]/li[last()-1]/a/text()",
     "item": {
+      "type": "xpath",
       "xpath": "//div[@class='data-list']/div[@class='row']",
       "startIndex": 0
     },

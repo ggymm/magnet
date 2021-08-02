@@ -5,12 +5,14 @@
   "publish": "https://bt113.com",
   "publishMail": "",
   "url": "https://duo1.dns33.top:39988",
-  "referer": "https://duo1.dns33.top:39988/?host=duo22.win",
+  "referer": "https://duo1.dns33.top:39988/?host=duo22.buzz",
   "params": {
     "default": "/search-{k}-rel-{p}.html"
   },
   "parse": {
+    "page": "",
     "item": {
+      "type": "xpath",
       "xpath": "//div[@class='p-wrapper']/div[5]/div[@class='ssbox']",
       "startIndex": 0
     },

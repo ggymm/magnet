@@ -1,12 +1,12 @@
 import QtQuick 6
-import QtQuick.Window 2.5
-import QtQuick.Controls 2.5
-import QtQuick.Layouts 2.5
-import QtQuick.Controls.Material 2.5
+import QtQuick.Window 6
+import QtQuick.Controls 6
+import QtQuick.Layouts 6
+import QtQuick.Controls.Material 6
 
 ApplicationWindow {
     id: main
-    title: qsTr("磁力链接搜索")
+    title: "磁力链接搜索"
     width: 1280
     height: 720
     minimumWidth: 960
@@ -18,23 +18,33 @@ ApplicationWindow {
 
     Connections {
         target : backend
-        function onLoadStateChanged(state) {
-            if (state === "error") {
-                search.text = "搜索"
-                search.enabled = true
-                message_info.text = "加载错误，请稍后重试"
-                message_timer.start()
-            } else if (state === "loading") {
-                search.text = "正在加载数据"
-                search.enabled = false
-            } else if (state === "loaded") {
-                search.text = "搜索"
-                search.enabled = true
+        function onLoadStateChanged(state, page_num) {
+            switch(state) {
+                case "error":
+                    search.text = "搜索"
+                    search.enabled = true
+                    message_info.text = "加载错误，请稍后重试"
+                    message_timer.start()
+                    break
+                case "loading":
+                    search.text = "正在搜索"
+                    search.enabled = false
+                    break
+                case "loaded":
+                    search.text = "搜索"
+                    search.enabled = true
+                    if (page_num > 0) {
+                        var currentIndex = page.currentIndex
+                        page_model.clear()
+                        for (var i = 1; i <= page_num; i++) {
+                            page_model.append({"key": i, "value": "第" + i + "页"})
+                        }
+                        page.currentIndex = currentIndex
+                    }
+                    break
             }
         }
     }
-
-    property variant list_pro: true
 
     ListModel {
         id: website_list_pro
@@ -56,7 +66,7 @@ ApplicationWindow {
         }
         ListElement {
             key: "btgg"
-            value: "BTGG"
+            value: "BTGG(代理)"
         }
         ListElement {
             key: "btsow"
@@ -72,7 +82,7 @@ ApplicationWindow {
         }
         ListElement {
             key: "cursor"
-            value: "吃力网"
+            value: "光标网"
         }
         ListElement {
             key: "sofan"
@@ -88,11 +98,8 @@ ApplicationWindow {
         Image {
             id: qr_code
             anchors.fill: parent
-            cache: false
         }
     }
-
-    property int message_show: 3
 
     Popup {
         id: message_popup
@@ -118,7 +125,7 @@ ApplicationWindow {
             id: message_info
             anchors.centerIn: parent
             font.pointSize: 10
-            text: qsTr("消息提示")
+            text: "消息提示"
         }
     }
 
@@ -127,6 +134,7 @@ ApplicationWindow {
         interval: 1000
         repeat: true
         triggeredOnStart: true
+        property int message_show: 3
         onTriggered: {
             if (message_show == 3) {
                 message_popup.open()
@@ -141,12 +149,14 @@ ApplicationWindow {
     }
 
     ApplicationWindow {
-        id: proxy_window
-        title: qsTr("代理设置")
-        width: 400
-        height: 200
-        minimumWidth: 400
-        minimumHeight: 200
+        id: setting_window
+        title: "设置"
+        width: 800
+        height: 600
+        minimumWidth: 800
+        minimumHeight: 600
+        maximumWidth: 800
+        maximumHeight: 600
         flags: Qt.Dialog
         modality: Qt.WindowModal
 
@@ -157,86 +167,154 @@ ApplicationWindow {
             console.log("请求后台数据")
         }
 
-        GridLayout {
-            columns: 2
+        ColumnLayout {
             anchors.fill: parent
             anchors.margins: 20
-            rowSpacing: 10
-            columnSpacing: 20
-            Label {
-                text: qsTr("代理服务地址")
-            }
-            TextField {
-                id: proxy_server
+            focus: true
+            RowLayout {
+                Layout.fillHeight: true
                 Layout.fillWidth: true
-                hoverEnabled: false
-                selectByMouse: true
-            }
+                ListModel {
+                    id: setting_menu_list
+                    ListElement {
+                        name: "搜索设置"
+                    }
+                    ListElement {
+                        name: "代理设置"
+                    }
+                    ListElement {
+                        name: "缓存设置"
+                    }
+                }
+                Component {
+                    id: setting_menu_item
+                    ItemDelegate {
+                        width: parent.width
+                        height: 36
+                        highlighted: ListView.isCurrentItem
 
-            Label {
-                text: qsTr("代理服务端口号")
-            }
-            TextField {
-                id: proxy_port
-                Layout.fillWidth: true
-                hoverEnabled: false
-                selectByMouse: true
-                validator: IntValidator {
-                    bottom: 0
-                    top: 65535
-                }
-            }
-            Item {
-                Layout.columnSpan: 2
-                Layout.fillWidth: true
-                implicitHeight: 10
-                Label {
-                    id: test_result
-                    text: ""
-                    anchors.centerIn: parent
-                }
-            }
-            Item {
-                Layout.columnSpan: 2
-                Layout.fillWidth: true
-                implicitHeight: 40
-                Row {
-                    anchors.centerIn: parent
-                    spacing: 20
-                    Button {
-                        id: test_proxy
-                        width: 120
-                        height: 40
-                        text: qsTr("测试代理")
+                        RowLayout {
+                            anchors.fill: parent
+                            Layout.fillHeight: true
+                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignCenter | Qt.AlignVCenter
+
+                            Label {
+                                text: model.name
+                                Layout.leftMargin: 8
+                                Layout.rightMargin: 8
+                                Layout.fillWidth: true
+                            }
+                        }
+
                         onClicked: {
-                            let state = backend.test_proxy(proxy_server.text, proxy_port.text)
-                            if (state === "success") {
-                                test_result.text = "测试成功, 代理设置正确"
-                                test_result.color = "#4CAF50"
-                            } else if (state === "failed") {
-                                test_result.text = "测试失败, 代理设置不正确"
-                                test_result.color = "#F44336"
+                            setting_menu.currentIndex = index
+                            setting_menu_content.currentIndex = index
+                        }
+                    }
+                }
+
+                ListView {
+                    id: setting_menu
+                    Layout.minimumWidth: 180
+                    Layout.fillHeight: true
+                    spacing: 8
+
+                    model: setting_menu_list
+                    delegate: setting_menu_item
+                }
+                ToolSeparator {
+                    bottomPadding: -52
+                    topPadding: 0
+                    Layout.fillHeight: true
+                }
+                StackLayout {
+                    id: setting_menu_content
+                    currentIndex: 0
+                    Layout.minimumWidth: 520
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    Item {
+                        Label {
+                            text: "搜索设置"
+                        }
+                    }
+                    Item {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+
+                        GridLayout {
+                            rowSpacing: 16
+                            columnSpacing: 20
+                            anchors {
+                                top: parent.top
+                                left: parent.left
+                                right: parent.right
+                            }
+                            columns: 2
+
+                            Label { text: "代理类型" }
+                            RowLayout {
+                                width: 100
+                                height: 100
+                                RadioButton { hoverEnabled: false; text: "HTTP" }
+                                RadioButton { hoverEnabled: false; text: "SOCKS5" }
+                            }
+
+                            Label { text: "代理地址" }
+                            TextField {
+                                Layout.fillWidth: true
+                                hoverEnabled: false
+                                selectByMouse: true
+                            }
+
+                            Label { text: "代理端口" }
+                            TextField {
+                                Layout.fillWidth: true
+                                hoverEnabled: false
+                                selectByMouse: true
+                                validator: IntValidator {
+                                    bottom: 0
+                                    top: 65535
+                                }
+                            }
+
+                            Label { text: "代理账号" }
+                            TextField {
+                                Layout.fillWidth: true
+                                hoverEnabled: false
+                                selectByMouse: true
+                            }
+
+                            Label { text: "代理密码" }
+                            TextField {
+                                Layout.fillWidth: true
+                                hoverEnabled: false
+                                selectByMouse: true
+                                echoMode: TextInput.Password
                             }
                         }
                     }
-                    Button {
-                        id: save_proxy
-                        width: 60
-                        height: 40
-                        text: qsTr("保存")
-                        onClicked: {
-                            proxy_window.close()
+                    Item {
+                        Label {
+                            text: "缓存设置"
                         }
                     }
-                    Button {
-                        id: save_proxy1
-                        width: 60
-                        height: 40
-                        text: qsTr("取消")
-                        onClicked: {
-                            proxy_window.close()
-                        }
+                }
+            }
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignRight | Qt.AlignTop
+                Button {
+                    text: "确定"
+                    onClicked: {
+                        console.log("保存")
                     }
+                }
+                Button {
+                    text: "取消"
+                    onClicked: close()
                 }
             }
         }
@@ -244,23 +322,27 @@ ApplicationWindow {
 
     menuBar: MenuBar {
         Menu {
-            title: qsTr("磁力链接搜索")
+            title: "磁力链接搜索"
             MenuItem {
-                text: qsTr("加载规则文件")
-                onTriggered: console.log("加载规则文件")
+                text: "搜索设置"
+                onTriggered: {
+                    setting_window.visible = true
+                }
             }
             MenuItem {
                 id: list_pro_ctrl
-                text: qsTr("只加载优质代理")
+                text: "只加载优质代理"
                 onTriggered: {
-                    if (list_pro) {
-                        website.model = website_list_pro
-                        list_pro_ctrl.text = "加载全部代理"
-                    } else {
-                        website.model = website_list
-                        list_pro_ctrl.text = "只加载优质代理"
+                    switch(text) {
+                        case "只加载优质代理":
+                            website.model = website_list_pro
+                            list_pro_ctrl.text = "加载全部代理"
+                            break
+                        case "加载全部代理":
+                            website.model = website_list
+                            list_pro_ctrl.text = "只加载优质代理"
+                            break
                     }
-                    list_pro = !list_pro
                 }
             }
             MenuItem {
@@ -269,34 +351,28 @@ ApplicationWindow {
             }
         }
         Menu {
-            title: qsTr("设置")
+            title: "扩展功能"
             MenuItem {
-                text: qsTr("代理服务设置")
+                text: "网盘搜索"
                 onTriggered: {
-                    proxy_window.visible = true
+                    console.log("网盘搜索")
                 }
             }
             MenuItem {
-                text: qsTr("编辑搜索规则")
+                text: "视频下载"
                 onTriggered: {
-
-                }
-            }
-            MenuItem {
-                text: qsTr("搜索设置")
-                onTriggered: {
-
+                    console.log("视频下载")
                 }
             }
         }
         Menu {
-            title: qsTr("帮助")
+            title: "帮助"
             MenuItem {
-                text: qsTr("使用手册")
+                text: "使用手册"
                 onTriggered: console.log("打开网页")
             }
             MenuItem {
-                text: qsTr("关于")
+                text: "关于"
                 onTriggered: console.log("检查更新等")
             }
         }
@@ -309,15 +385,15 @@ ApplicationWindow {
             id: website
             x: 40
             y: 20
-            width: 200
+            width: 180
             model: website_list
             textRole: "value"
             valueRole: "key"
         }
         TextField {
             id: search_terms
-            text: qsTr("龙珠")
-            width: 520
+            text: "龙珠"
+            width: 480
             anchors {
                 top: website.top
                 left: website.right
@@ -325,20 +401,40 @@ ApplicationWindow {
             }
             hoverEnabled: false
             selectByMouse: true
-            placeholderText: qsTr("搜索词")
+            placeholderText: "搜索词"
             font.pointSize: 12
         }
-        Button {
-            id: search
-            width: 120
+        ComboBox {
+            id: page
+            x: 40
+            y: 20
+            width: 100
             anchors {
                 top: search_terms.top
                 left: search_terms.right
                 leftMargin: 20
             }
-            text: qsTr("搜索")
+            model: ListModel {
+                id: page_model
+                ListElement {
+                    key: 1
+                    value: "第一页"
+                }
+            }
+            textRole: "value"
+            valueRole: "key"
+        }
+        Button {
+            id: search
+            width: 80
+            anchors {
+                top: search_terms.top
+                left: page.right
+                leftMargin: 20
+            }
+            text: "搜索"
             onClicked: {
-                backend.search(website.currentValue, search_terms.text)
+                backend.search(website.currentValue, search_terms.text, page.currentValue)
             }
         }
     }
@@ -360,7 +456,7 @@ ApplicationWindow {
         ScrollBar.vertical: ScrollBar {}
         boundsBehavior: Flickable.StopAtBounds
 
-        model: backend.search_result_list
+        model: backend.search_result_model
 
         delegate: Item {
             width: main.width - 80
@@ -379,17 +475,17 @@ ApplicationWindow {
                 Row {
                     spacing: 20
                     Label {
-                        text: qsTr("热度: ") + model.hot
+                        text: "热度: " + model.hot
                         color: "gray"
                         font.pixelSize: 12
                     }
                     Label {
-                        text: qsTr("文件大小: ") + model.size
+                        text: "文件大小: " + model.size
                         color: "gray"
                         font.pixelSize: 12
                     }
                     Label {
-                        text: qsTr("创建时间: ") + model.time
+                        text: "创建时间: " + model.time
                         color: "gray"
                         font.pixelSize: 12
                     }
@@ -406,7 +502,7 @@ ApplicationWindow {
                 Button {
                     id: qrcode
                     height: 40
-                    text: qsTr("二维码")
+                    text: "二维码"
                     onClicked: {
                         qr_code.source = backend.magnet_qr_code(model.magnet)
                         qr_code_popup.open()
@@ -415,7 +511,7 @@ ApplicationWindow {
                 Button {
                     id: download
                     height: 40
-                    text: qsTr("迅雷下载")
+                    text: "迅雷下载"
                     onClicked: {
                         backend.download(model.magnet)
                     }
@@ -423,7 +519,7 @@ ApplicationWindow {
                 Button {
                     id: copy_url
                     height: 40
-                    text: qsTr("复制链接")
+                    text: "复制链接"
                     onClicked: {
                         backend.copy_to_clipboard(model.magnet)
                         message_info.text = "复制成功"

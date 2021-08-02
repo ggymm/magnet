@@ -5,11 +5,13 @@
   "publish": "https://cili.st",
   "url": "https://6mag.net",
   "params": {
-    "default": "/search?q=龙珠"
+    "default": "/search?q={k}"
   },
   "parse": {
+    "page": "",
     "item": {
-      "xpath": "",
+      "type": "url",
+      "xpath": "//table[contains(@class,'file-list')]//td/a/@href",
       "startIndex": 0
     },
     "magnet": [
