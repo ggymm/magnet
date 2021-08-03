@@ -81,6 +81,10 @@ class MainWindow(QObject):
             logger.error(f'代理校验失败: {e}')
             return 'failed'
 
+    @Slot(result = 'QVariant')
+    def get_config(self):
+        return self._config.get_config()
+
     @Slot(str, result = str)
     def magnet_qr_code(self, magnet):
         logger.info(f'生成二维码: {magnet}')
@@ -123,7 +127,14 @@ class MainWindow(QObject):
     def search(self, key, search_terms, page):
         logger.info(f'提交搜索任务, 网站规则: {key}, 搜索词: {search_terms}, 页数: {page}')
         # 提交任务
-        self._pool.submit(run_crawler, key, search_terms, page, '').add_done_callback(self.search_done)
+        proxy_config = self._config.get_config()["proxy"]
+        proxies = {}
+        if proxy_config["enable"]:
+            proxies = {
+                'http':  f'{proxy_config["type"]}://{proxy_config["host"]}:{proxy_config["port"]}',
+                'https': f'{proxy_config["type"]}://{proxy_config["host"]}:{proxy_config["port"]}'
+            }
+        self._pool.submit(run_crawler, key, search_terms, page, '', proxies).add_done_callback(self.search_done)
         # 通知页面处于加载状态（忽视编辑器莫名其妙的警告）
         # noinspection PyUnresolvedReferences
         self.loadStateChanged.emit('loading', 0)

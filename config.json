@@ -1,0 +1,10 @@
+{
+  "proxy": {
+    "enable": true,
+    "type": "http",
+    "host": "localhost",
+    "port": 9910,
+    "username": "",
+    "password": ""
+  }
+}

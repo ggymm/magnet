@@ -12,7 +12,7 @@ from user_agent import random_ua
 magnet_head = 'magnet:?xt=urn:btih:'
 
 
-def run_crawler(key: str, search_terms: str, page: int, sort: str):
+def run_crawler(key: str, search_terms: str, page: int, sort: str, proxies):
     rule_name = f'rule/{key}.json'
     logger.info('搜索任务开始执行')
     logger.info(f'文件名称: {rule_name}, 搜索词: {search_terms}, 页数: {page}, 排序规则: {sort}')
@@ -28,14 +28,9 @@ def run_crawler(key: str, search_terms: str, page: int, sort: str):
             logger.info(f'搜索网址: {url}')
 
             headers = {
-                "Accept":          "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-                "Accept-Encoding": "gzip, deflate, br",
-                "Accept-Language": "zh-CN,zh;q=0.9",
-                'referer':         parse.quote(rule['referer']),
-                'user-agent':      random_ua()
+                'referer':    parse.quote(rule['referer']),
+                'user-agent': random_ua()
             }
-
-            proxies = {'http': 'http://127.0.0.1:9910', 'https': 'http://127.0.0.1:9910', }
 
             # 发送请求获取数据
             content = get(url, timeout = 10, headers = headers, proxies = proxies)

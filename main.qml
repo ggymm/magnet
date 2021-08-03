@@ -29,21 +29,32 @@ ApplicationWindow {
                 case "loading":
                     search.text = "正在搜索"
                     search.enabled = false
+                    page_up.enabled = false
+                    page_down.enabled = false
                     break
                 case "loaded":
                     search.text = "搜索"
                     search.enabled = true
-                    if (page_num > 0) {
-                        var currentIndex = page.currentIndex
-                        page_model.clear()
-                        for (var i = 1; i <= page_num; i++) {
-                            page_model.append({"key": i, "value": "第" + i + "页"})
-                        }
-                        page.currentIndex = currentIndex
-                    }
+                    page_up.enabled = page > 1
+                    page_down.enabled = page < page_num
                     break
             }
         }
+    }
+
+    Component.onCompleted: {
+        var config = backend.get_config()
+
+        proxy_enable.checked = config["proxy"]["enable"]
+        if (config["proxy"]["type"] === "http") {
+            proxy_type_http.checked = true
+        } else if (config["proxy"]["type"] === "socks5") {
+            proxy_type_socks5.checked = true
+        }
+        proxy_host.text = config["proxy"]["host"]
+        proxy_port.text = config["proxy"]["port"]
+        proxy_username.text = config["proxy"]["username"]
+        proxy_password.text = config["proxy"]["password"]
     }
 
     ListModel {
@@ -151,21 +162,17 @@ ApplicationWindow {
     ApplicationWindow {
         id: setting_window
         title: "设置"
-        width: 800
-        height: 600
-        minimumWidth: 800
-        minimumHeight: 600
-        maximumWidth: 800
-        maximumHeight: 600
+        width: 600
+        height: 480
+        minimumWidth: 600
+        minimumHeight: 480
+        maximumWidth: 600
+        maximumHeight: 480
         flags: Qt.Dialog
         modality: Qt.WindowModal
 
         Material.theme: Material.Dark
         visible: false
-
-        Component.onCompleted: {
-            console.log("请求后台数据")
-        }
 
         ColumnLayout {
             anchors.fill: parent
@@ -216,7 +223,7 @@ ApplicationWindow {
 
                 ListView {
                     id: setting_menu
-                    Layout.minimumWidth: 180
+                    Layout.minimumWidth: 120
                     Layout.fillHeight: true
                     spacing: 8
 
@@ -231,7 +238,7 @@ ApplicationWindow {
                 StackLayout {
                     id: setting_menu_content
                     currentIndex: 0
-                    Layout.minimumWidth: 520
+                    Layout.minimumWidth: 400
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Item {
@@ -250,19 +257,36 @@ ApplicationWindow {
                                 top: parent.top
                                 left: parent.left
                                 right: parent.right
+                                rightMargin: 36
                             }
                             columns: 2
+
+                            Label { text: "启用代理" }
+                            Switch {
+                                id: proxy_enable
+                                text: checked ? "是" : "否"
+                                hoverEnabled: false
+                            }
 
                             Label { text: "代理类型" }
                             RowLayout {
                                 width: 100
                                 height: 100
-                                RadioButton { hoverEnabled: false; text: "HTTP" }
-                                RadioButton { hoverEnabled: false; text: "SOCKS5" }
+                                RadioButton {
+                                    id: proxy_type_http
+                                    text: "HTTP"
+                                    hoverEnabled: false
+                                }
+                                RadioButton {
+                                    id: proxy_type_socks5
+                                    text: "SOCKS5"
+                                    hoverEnabled: false
+                                }
                             }
 
                             Label { text: "代理地址" }
                             TextField {
+                                id: proxy_host
                                 Layout.fillWidth: true
                                 hoverEnabled: false
                                 selectByMouse: true
@@ -270,17 +294,16 @@ ApplicationWindow {
 
                             Label { text: "代理端口" }
                             TextField {
+                                id: proxy_port
                                 Layout.fillWidth: true
                                 hoverEnabled: false
                                 selectByMouse: true
-                                validator: IntValidator {
-                                    bottom: 0
-                                    top: 65535
-                                }
+                                validator: IntValidator { bottom: 0; top: 65535 }
                             }
 
                             Label { text: "代理账号" }
                             TextField {
+                                id: proxy_username
                                 Layout.fillWidth: true
                                 hoverEnabled: false
                                 selectByMouse: true
@@ -288,6 +311,7 @@ ApplicationWindow {
 
                             Label { text: "代理密码" }
                             TextField {
+                                id: proxy_password
                                 Layout.fillWidth: true
                                 hoverEnabled: false
                                 selectByMouse: true
@@ -378,6 +402,7 @@ ApplicationWindow {
         }
     }
 
+    property int page: 1
     Item {
         id: search_info
         height: 80
@@ -404,37 +429,48 @@ ApplicationWindow {
             placeholderText: "搜索词"
             font.pointSize: 12
         }
-        ComboBox {
-            id: page
-            x: 40
-            y: 20
-            width: 100
-            anchors {
-                top: search_terms.top
-                left: search_terms.right
-                leftMargin: 20
-            }
-            model: ListModel {
-                id: page_model
-                ListElement {
-                    key: 1
-                    value: "第一页"
-                }
-            }
-            textRole: "value"
-            valueRole: "key"
-        }
         Button {
             id: search
             width: 80
             anchors {
                 top: search_terms.top
-                left: page.right
+                left: search_terms.right
                 leftMargin: 20
             }
             text: "搜索"
             onClicked: {
-                backend.search(website.currentValue, search_terms.text, page.currentValue)
+                backend.search(website.currentValue, search_terms.text, page)
+            }
+        }
+        Button {
+            id: page_up
+            width: 40
+            anchors {
+                top: search_terms.top
+                left: search.right
+                leftMargin: 10
+            }
+            text: "▲"
+            onClicked: {
+                if (page === 1) {
+                    return
+                }
+                page -= 1
+                backend.search(website.currentValue, search_terms.text, page)
+            }
+        }
+        Button {
+            id: page_down
+            width: 40
+            anchors {
+                top: search_terms.top
+                left: page_up.right
+                leftMargin: 10
+            }
+            text: "▼"
+            onClicked: {
+                page += 1
+                backend.search(website.currentValue, search_terms.text, page)
             }
         }
     }
@@ -493,6 +529,7 @@ ApplicationWindow {
             }
 
             Row {
+                id: handler
                 anchors {
                     right: parent.right
                     rightMargin: 40
