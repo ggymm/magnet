@@ -2,13 +2,13 @@ import base64
 import io
 import re
 import sys
-from concurrent.futures import Future, ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 
 from PySide6.QtCore import QAbstractListModel, Qt, QModelIndex, QObject, Slot, Property, Signal
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 from loguru import logger
-from qrcode import QRCode, constants
+from qrcode import QRCode
 from requests import head
 
 from config import Config

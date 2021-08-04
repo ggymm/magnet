@@ -6,16 +6,21 @@
   "publishMail": "",
   "url": "",
   "referer": "",
-  "params": {
+  "path": {
     "default": ""
   },
   "parse": {
-    "page": "",
     "item": {
       "type": "",
       "xpath": "",
       "startIndex": 0
     },
+    "page": [
+      {
+        "type": null,
+        "default": 0
+      }
+    ],
     "magnet": [
       {
         "type": "",

@@ -4,44 +4,50 @@
   "proxy": false,
   "publish": "https://cili.st",
   "url": "https://6mag.net",
-  "params": {
+  "referer": "https://6mag.net",
+  "path": {
     "default": "/search?q={k}"
   },
   "parse": {
-    "page": "",
     "item": {
       "type": "url",
       "xpath": "//table[contains(@class,'file-list')]//td/a/@href",
       "startIndex": 0
     },
-    "magnet": [
+    "page": [
       {
         "type": null,
-        "default": ""
+        "default": 0
+      }
+    ],
+    "magnet": [
+      {
+        "type": "xpath",
+        "xpath": "//input[@id='input-magnet']/@value"
       }
     ],
     "name": [
       {
-        "type": null,
-        "default": ""
+        "type": "xpath",
+        "xpath": "//h2[@class='magnet-title']/text()"
       }
     ],
     "hot": [
       {
         "type": null,
-        "default": ""
+        "default": 99
       }
     ],
     "size": [
       {
-        "type": null,
-        "default": ""
+        "type": "xpath",
+        "xpath": "//dl[contains(@class,'torrent-info')]/dd[last()]/text()"
       }
     ],
     "time": [
       {
         "type": null,
-        "default": ""
+        "default": "2000-00-00"
       }
     ]
   }

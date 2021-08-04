@@ -3,6 +3,7 @@ import re
 import sys
 from urllib import parse
 
+from html5lib import HTMLParser, treebuilders
 from loguru import logger
 from lxml import etree
 from requests import get
@@ -21,46 +22,70 @@ def run_crawler(key: str, search_terms: str, page: int, sort: str, proxies):
         with open(rule_name, encoding = 'utf-8') as rule_json:
             rule = json.load(rule_json)
 
-            params = ''
+            # 排序条件
+            # TODO: 各个网站规则不一，暂不实现
             if len(sort) == 0:
-                params = rule['params']['default'].format(k = search_terms, p = page)
-            url = rule['url'] + params
-            logger.info(f'搜索网址: {url}')
+                path = rule['path']['default'].format(k = search_terms, p = page)
+            else:
+                path = ''
+            page_url = rule['url'] + path
+            logger.info(f'搜索网址: {page_url}')
 
+            # 发送请求获取数据
             headers = {
                 'referer':    parse.quote(rule['referer']),
                 'user-agent': random_ua()
             }
-
-            # 发送请求获取数据
-            content = get(url, timeout = 10, headers = headers, proxies = proxies)
-            doc = etree.HTML(content.text)
+            content = get(page_url, timeout = 10, headers = headers, proxies = proxies)
+            parser = HTMLParser(treebuilders.getTreeBuilder('lxml'), namespaceHTMLElements = False)
+            document = parser.parse(content.text)
 
             # 获取页数
-            page_xpath = rule['parse']['page']
-            if len(page_xpath) == 0:
-                page_num = 0
-            else:
-                page_elem = doc.xpath(page_xpath)
-                if len(page_elem) == 0:
+            page_sel = rule['parse']['page']
+            page_num = 0
+            for sel in page_sel:
+                if sel['type'] is None:
                     page_num = 0
-                else:
-                    page_num = int(page_elem[0])
+                    break
+                elif sel['type'] == 'xpath':
+                    page_elem = document.xpath(sel['xpath'])
+                    if len(page_elem) == 0:
+                        page_num = 0
+                    else:
+                        page_num = page_elem[0]
+                elif sel['type'] == 'regex':
+                    page_num = re.findall(sel['regex'], page_num)
+                    if len(page_num) == 0:
+                        page_num = ''
+                    else:
+                        page_num = page_num[0]
+            page_num = int(page_num)
 
+            # 获取数据列表（字符串格式）
             data_result = []
-            # 解析数据列表
             item_list = []
-            item_rule = rule['parse']['item']
-            if item_rule["type"] == "xpath":
-                elem_list = doc.xpath(item_rule['xpath'])
+            if rule['parse']['item']["type"] == "xpath":
+                elem_list = document.xpath(rule['parse']['item']['xpath'])
                 for elem in elem_list:
                     item_list.append(etree.tostring(elem, encoding = str))
-            elif item_rule["type"] == "url":
-                pass
+            elif rule['parse']['item']["type"] == "url":
+                item_urls = document.xpath(rule['parse']['item']['xpath'])
+                start = 0
+                end = len(item_urls)
+                if page_num == 0:
+                    page_num = int(len(item_urls) / 10)
+                    if page <= page_num:
+                        start = (page - 1) * 10
+                        end = start + 10
+                for index in range(start, end):
+                    url = rule['url'] + item_urls[index]
+                    item_content = get(url, timeout = 10, headers = headers, proxies = proxies)
+                    item_list.append(item_content.text)
             logger.info(f'结果列表: {item_list}')
 
-            start = item_rule['startIndex']
-            for index in range(start, len(item_list)):
+            # 解析数据列表
+            for index in range(rule['parse']['item']['startIndex'], len(item_list)):
+                # 按照规则解析数据
                 item_data = {
                     'magnet': 'magnet',
                     'name':   'name',
@@ -68,14 +93,11 @@ def run_crawler(key: str, search_terms: str, page: int, sort: str, proxies):
                     'size':   'size',
                     'time':   'time',
                 }
-
-                # 按照规则解析数据
                 for key in item_data:
-                    value = None
-                    selector = rule['parse'][item_data[key]]
+                    value = ''
 
                     # 遍历规则处理数据
-                    for sel in selector:
+                    for sel in rule['parse'][item_data[key]]:
                         # xpath匹配规则
                         if sel['type'] == 'xpath':
                             value = etree.HTML(item_list[index]).xpath(sel['xpath'])
@@ -88,7 +110,7 @@ def run_crawler(key: str, search_terms: str, page: int, sort: str, proxies):
                         # xpath列表匹配规则
                         if sel['type'] == 'xpathList':
                             values = etree.HTML(item_list[index]).xpath(sel['xpath'])
-                            # xpath匹配结果都是列表
+                            # xpath匹配结果是列表
                             if len(values) == 0:
                                 value = ''
                             else:
@@ -107,7 +129,7 @@ def run_crawler(key: str, search_terms: str, page: int, sort: str, proxies):
                         # 正则表达式匹配规则
                         elif sel['type'] == 'regex':
                             value = re.findall(sel['regex'], value)
-                            # 匹配结果是列表
+                            # 正则匹配结果是列表
                             if len(value) == 0:
                                 value = ''
                             else:

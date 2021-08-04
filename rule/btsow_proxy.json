@@ -6,16 +6,21 @@
   "publishMail": "",
   "url": "https://btsow.com",
   "referer": "https://btsow.com",
-  "params": {
+  "path": {
     "default": "/search/{k}/page/{p}"
   },
   "parse": {
-    "page": "//ul[contains(@class,'pagination')]/li[10]/a/text()",
     "item": {
       "type": "xpath",
       "xpath": "//div[@class='data-list']/div[@class='row']",
       "startIndex": 0
     },
+    "page": [
+      {
+        "type": "xpath",
+        "xpath": "//ul[contains(@class,'pagination')]/li[last()-1]/a/text()"
+      }
+    ],
     "magnet": [
       {
         "type": "xpath",

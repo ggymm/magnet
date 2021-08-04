@@ -1,0 +1,63 @@
+{
+  "id": "9cili",
+  "name": "磁力海",
+  "proxy": false,
+  "publish": "https://9cili.com",
+  "publishMail": "",
+  "url": "https://drxdsn0k.xyz",
+  "referer": "https://drxdsn0k.xyz",
+  "path": {
+    "default": "/search-{k}-0-0-{p}.html"
+  },
+  "parse": {
+    "item": {
+      "type": "xpath",
+      "xpath": "//div[@class='search_list']/dl[@class='detail']",
+      "startIndex": 0
+    },
+    "page": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='pagediv']/span[1]/text()"
+      },
+      {
+        "type": "regex",
+        "regex": "共([\\d.]+)页"
+      }
+    ],
+    "magnet": [
+      {
+        "type": "xpath",
+        "xpath": "//dd[@class='info']/span/a/@href"
+      }
+    ],
+    "name": [
+      {
+        "type": "xpathList",
+        "xpath": "//dt/a/span//text()"
+      }
+    ],
+    "hot": [
+      {
+        "type": "xpath",
+        "xpath": "//dd[@class='info']/span[5]/b/text()"
+      }
+    ],
+    "size": [
+      {
+        "type": "xpath",
+        "xpath": "//dd[@class='info']/span[3]/text()"
+      },
+      {
+        "type": "regex",
+        "regex": "文档大小:([\\d.]+\\s[A-Z].)"
+      }
+    ],
+    "time": [
+      {
+        "type": "xpath",
+        "xpath": "//dd[@class='info']/span[1]/b/text()"
+      }
+    ]
+  }
+}

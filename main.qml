@@ -60,44 +60,44 @@ ApplicationWindow {
     ListModel {
         id: website_list_pro
         ListElement {
-            key: "btsow"
-            value: "BTSOW(优)"
-        }
-        ListElement {
-            key: "btsow_proxy"
-            value: "BTSOW(优)(代理)"
+            key: 'btsow_proxy'
+            value: 'BTSOW（优）（代理）'
         }
     }
 
     ListModel {
         id: website_list
         ListElement {
-            key: "bt113"
-            value: "磁力多"
+            key: '9cili'
+            value: '磁力海'
         }
         ListElement {
-            key: "btgg"
-            value: "BTGG(代理)"
+            key: 'bt113'
+            value: '磁力多'
         }
         ListElement {
-            key: "btsow"
-            value: "BTSOW(优)"
+            key: 'btgg'
+            value: 'BTGG（代理）'
         }
         ListElement {
-            key: "btsow_proxy"
-            value: "BTSOW(优)(代理)"
+            key: 'btsow'
+            value: 'BTSOW（优）'
         }
         ListElement {
-            key: "cili"
-            value: "无极磁链"
+            key: 'btsow_proxy'
+            value: 'BTSOW（优）（代理）'
         }
         ListElement {
-            key: "cursor"
-            value: "光标网"
+            key: 'cili'
+            value: '无极磁链'
         }
         ListElement {
-            key: "sofan"
-            value: "搜番"
+            key: 'cursor'
+            value: '光标网'
+        }
+        ListElement {
+            key: 'sofan'
+            value: '搜番'
         }
     }
 
@@ -408,7 +408,7 @@ ApplicationWindow {
         height: 80
         ComboBox {
             id: website
-            x: 40
+            x: 36
             y: 20
             width: 180
             model: website_list
@@ -448,9 +448,10 @@ ApplicationWindow {
             anchors {
                 top: search_terms.top
                 left: search.right
-                leftMargin: 10
+                leftMargin: 20
             }
             text: "▲"
+            enabled: false
             onClicked: {
                 if (page === 1) {
                     return
@@ -468,6 +469,7 @@ ApplicationWindow {
                 leftMargin: 10
             }
             text: "▼"
+            enabled: false
             onClicked: {
                 page += 1
                 backend.search(website.currentValue, search_terms.text, page)
@@ -483,9 +485,9 @@ ApplicationWindow {
             bottom: parent.bottom
             left: parent.left
             topMargin: 20
-            rightMargin: 40
+            rightMargin: 36
             bottomMargin: 20
-            leftMargin: 40
+            leftMargin: 36
         }
         spacing: 20
         clip: true
@@ -501,12 +503,19 @@ ApplicationWindow {
                 id: info
                 anchors {
                     left: parent.left
+                    right: handler.left
                     verticalCenter: parent.verticalCenter
                 }
                 Label {
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        rightMargin: 16
+                    }
                     text: model.name
                     font.pixelSize: 16
                     bottomPadding: 20
+                    clip: true
                 }
                 Row {
                     spacing: 20
@@ -532,7 +541,7 @@ ApplicationWindow {
                 id: handler
                 anchors {
                     right: parent.right
-                    rightMargin: 40
+                    rightMargin: 20
                     verticalCenter: parent.verticalCenter
                 }
                 spacing: 20

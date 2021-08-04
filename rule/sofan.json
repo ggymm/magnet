@@ -6,16 +6,21 @@
   "publishMail": "lauchichoy@south.flyzoohotel.com.cn",
   "url": "https://fan1.yun55.top:65533",
   "referer": "https://fan1.yun55.top:65533/?host=a4.fan55.top",
-  "params": {
+  "path": {
     "default": "/s?word={k}&page={p}"
   },
   "parse": {
-    "page": "",
     "item": {
       "type": "xpath",
       "xpath": "//div[@class='container-fluid']//ul[@class='list-unstyled']",
       "startIndex": 0
     },
+    "page": [
+      {
+        "type": null,
+        "default": 0
+      }
+    ],
     "magnet": [
       {
         "type": "xpath",
