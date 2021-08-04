@@ -57,50 +57,6 @@ ApplicationWindow {
         proxy_password.text = config["proxy"]["password"]
     }
 
-    ListModel {
-        id: website_list_pro
-        ListElement {
-            key: 'btsow_proxy'
-            value: 'BTSOW（优）（代理）'
-        }
-    }
-
-    ListModel {
-        id: website_list
-        ListElement {
-            key: '9cili'
-            value: '磁力海'
-        }
-        ListElement {
-            key: 'bt113'
-            value: '磁力多'
-        }
-        ListElement {
-            key: 'btgg'
-            value: 'BTGG（代理）'
-        }
-        ListElement {
-            key: 'btsow'
-            value: 'BTSOW（优）'
-        }
-        ListElement {
-            key: 'btsow_proxy'
-            value: 'BTSOW（优）（代理）'
-        }
-        ListElement {
-            key: 'cili'
-            value: '无极磁链'
-        }
-        ListElement {
-            key: 'cursor'
-            value: '光标网'
-        }
-        ListElement {
-            key: 'sofan'
-            value: '搜番'
-        }
-    }
-
     Popup {
         id: qr_code_popup
         anchors.centerIn: parent
@@ -399,6 +355,58 @@ ApplicationWindow {
                 text: "关于"
                 onTriggered: console.log("检查更新等")
             }
+        }
+    }
+
+    ListModel {
+        id: website_list_pro
+        ListElement {
+            key: 'btsow_proxy'
+            value: 'BTSOW[优][代理]'
+        }
+    }
+
+    ListModel {
+        id: website_list
+        ListElement {
+            key: '9cili'
+            value: '磁力海'
+        }
+        ListElement {
+            key: 'bt113'
+            value: '磁力多'
+        }
+        ListElement {
+            key: 'btgg'
+            value: 'BTGG【代理】'
+        }
+        ListElement {
+            key: 'bthub'
+            value: 'BTHUB'
+        }
+        ListElement {
+            key: 'btsearch'
+            value: '磁力社区【慢】【未完成】'
+        }
+        ListElement {
+            key: 'btsow'
+            value: 'BTSOW【优】'
+        }
+        ListElement {
+            key: 'btsow_proxy'
+            value: 'BTSOW【优】【代理】'
+        }
+        ListElement {
+            key: 'cili'
+            value: '无极磁链【慢】'
+        }
+        ListElement {
+            key: 'cursor'
+            value: '光标网'
+        }
+        ListElement {
+            key: 'sofan'
+            value: '搜番'
         }
     }
 

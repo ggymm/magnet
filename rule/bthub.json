@@ -1,0 +1,60 @@
+{
+  "id": "bthub",
+  "name": "BTHUB",
+  "proxy": false,
+  "publish": "https://github.com/fwonggh/Bthub",
+  "publishMail": "",
+  "url": "https://bthub36.xyz/cn",
+  "referer": "https://bthub36.xyz/cn",
+  "path": {
+    "default": "/search/kw-{k}-{p}.html"
+  },
+  "parse": {
+    "item": {
+      "type": "xpath",
+      "xpath": "//div[@class='search-item detail-width']",
+      "startIndex": 0
+    },
+    "page": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='bottom-pager detail-width']/a[last()-1]/text()"
+      }
+    ],
+    "magnet": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='item-title']/h3/a/@href"
+      },
+      {
+        "type": "subIndex",
+        "start": -45,
+        "end": -5
+      }
+    ],
+    "name": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='item-title']/h3/a/@title"
+      }
+    ],
+    "hot": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='item-bar']/span[3]/b/text()"
+      }
+    ],
+    "size": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='item-bar']/span[1]/b/text()"
+      }
+    ],
+    "time": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='item-bar']/span[2]/b/text()"
+      }
+    ]
+  }
+}

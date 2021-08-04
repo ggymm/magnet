@@ -42,21 +42,21 @@ def run_crawler(key: str, search_terms: str, page: int, sort: str, proxies):
 
             # 获取页数
             page_sel = rule['parse']['page']
-            page_num = 0
+            page_num = ''
             for sel in page_sel:
                 if sel['type'] is None:
-                    page_num = 0
+                    page_num = '0'
                     break
                 elif sel['type'] == 'xpath':
                     page_elem = document.xpath(sel['xpath'])
                     if len(page_elem) == 0:
-                        page_num = 0
+                        page_num = '0'
                     else:
                         page_num = page_elem[0]
                 elif sel['type'] == 'regex':
                     page_num = re.findall(sel['regex'], page_num)
                     if len(page_num) == 0:
-                        page_num = ''
+                        page_num = '0'
                     else:
                         page_num = page_num[0]
             page_num = int(page_num)

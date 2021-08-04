@@ -1,0 +1,70 @@
+{
+  "id": "btsearch",
+  "name": "磁力社区【慢】【未完成】",
+  "proxy": false,
+  "publish": "",
+  "publishMail": "admin@btsearch.cc",
+  "url": "https://www.btsearch.cc",
+  "referer": "https://www.btsearch.cc",
+  "path": {
+    "default": "/{k}/?c=&s=time&p={p}"
+  },
+  "parse": {
+    "item": {
+      "type": "url",
+      "xpath": "//ul[@class='mlist']/li/h3/a/@href",
+      "startIndex": 0
+    },
+    "page": [
+      {
+        "type": "xpath",
+        "xpath": "//ul[@class='pg']/a[last()-1]/text()"
+      }
+    ],
+    "magnet": [
+      {
+        "type": "xpath",
+        "xpath": "//dl[@class='BotInfo']/p[6]/a/text()"
+      }
+    ],
+    "name": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='main']/h1/text()"
+      }
+    ],
+    "hot": [
+      {
+        "type": "xpath",
+        "xpath": "//dl[@class='BotInfo']/p[4]/text()"
+      },
+      {
+        "type": "subIndex",
+        "start": 6,
+        "end": null
+      }
+    ],
+    "size": [
+      {
+        "type": "xpath",
+        "xpath": "//dl[@class='BotInfo']/p[3]/text()"
+      },
+      {
+        "type": "subIndex",
+        "start": 6,
+        "end": null
+      }
+    ],
+    "time": [
+      {
+        "type": "xpath",
+        "xpath": "//dl[@class='BotInfo']/p[1]/text()"
+      },
+      {
+        "type": "subIndex",
+        "start": 6,
+        "end": null
+      }
+    ]
+  }
+}

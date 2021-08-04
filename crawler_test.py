@@ -8,7 +8,7 @@ from requests import get
 from crawler import run_crawler
 from user_agent import random_ua
 
-key = '9cili'
+key = 'btsearch'
 search_terms = '龙珠'
 page = 1
 sort = ''
@@ -56,6 +56,11 @@ def test_9cili():
             print(etree.tostring(elem, encoding = str))
 
 
+def test_btsearch():
+    pass
+
+
 if __name__ == '__main__':
     # test_request()
-    test_9cili()
+    # test_9cili()
+    test_crawler()
