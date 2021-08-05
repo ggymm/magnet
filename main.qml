@@ -43,8 +43,22 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        var config = backend.get_config()
+        var rules_data = backend.get_rules()
+        for (var i = 0; i < rules_data.length; i++) {
+            rules_model.append({
+                'key': rules_data[i]['key'],
+                'value': rules_data[i]['value'],
+            })
+            if (rules_data[i]['pro']) {
+                rules_pro_model.append({
+                    'key': rules_data[i]['key'],
+                    'value': rules_data[i]['value'],
+                })
+            }
+        }
+        rules.currentIndex = 0
 
+        var config = backend.get_config()
         proxy_enable.checked = config["proxy"]["enable"]
         if (config["proxy"]["type"] === "http") {
             proxy_type_http.checked = true
@@ -311,16 +325,16 @@ ApplicationWindow {
             }
             MenuItem {
                 id: list_pro_ctrl
-                text: "只加载优质代理"
+                text: "只加载优质规则"
                 onTriggered: {
                     switch(text) {
-                        case "只加载优质代理":
-                            website.model = website_list_pro
-                            list_pro_ctrl.text = "加载全部代理"
+                        case "只加载优质规则":
+                            rules.model = rules_pro_model
+                            list_pro_ctrl.text = "加载全部规则"
                             break
-                        case "加载全部代理":
-                            website.model = website_list
-                            list_pro_ctrl.text = "只加载优质代理"
+                        case "加载全部规则":
+                            rules.model = rules_model
+                            list_pro_ctrl.text = "只加载优质规则"
                             break
                     }
                 }
@@ -358,68 +372,19 @@ ApplicationWindow {
         }
     }
 
-    ListModel {
-        id: website_list_pro
-        ListElement {
-            key: 'btsow_proxy'
-            value: 'BTSOW[优][代理]'
-        }
-    }
-
-    ListModel {
-        id: website_list
-        ListElement {
-            key: '9cili'
-            value: '磁力海'
-        }
-        ListElement {
-            key: 'bt113'
-            value: '磁力多'
-        }
-        ListElement {
-            key: 'btgg'
-            value: 'BTGG【代理】'
-        }
-        ListElement {
-            key: 'bthub'
-            value: 'BTHUB'
-        }
-        ListElement {
-            key: 'btsearch'
-            value: '磁力社区【慢】【未完成】'
-        }
-        ListElement {
-            key: 'btsow'
-            value: 'BTSOW【优】'
-        }
-        ListElement {
-            key: 'btsow_proxy'
-            value: 'BTSOW【优】【代理】'
-        }
-        ListElement {
-            key: 'cili'
-            value: '无极磁链【慢】'
-        }
-        ListElement {
-            key: 'cursor'
-            value: '光标网'
-        }
-        ListElement {
-            key: 'sofan'
-            value: '搜番'
-        }
-    }
+    ListModel { id: rules_pro_model }
+    ListModel { id: rules_model }
 
     property int page: 1
     Item {
         id: search_info
         height: 80
         ComboBox {
-            id: website
+            id: rules
             x: 36
             y: 20
             width: 180
-            model: website_list
+            model: rules_model
             textRole: "value"
             valueRole: "key"
         }
@@ -428,8 +393,8 @@ ApplicationWindow {
             text: "龙珠"
             width: 480
             anchors {
-                top: website.top
-                left: website.right
+                top: rules.top
+                left: rules.right
                 leftMargin: 20
             }
             hoverEnabled: false
@@ -447,7 +412,7 @@ ApplicationWindow {
             }
             text: "搜索"
             onClicked: {
-                backend.search(website.currentValue, search_terms.text, page)
+                backend.search(rules.currentValue, search_terms.text, page)
             }
         }
         Button {
@@ -465,7 +430,7 @@ ApplicationWindow {
                     return
                 }
                 page -= 1
-                backend.search(website.currentValue, search_terms.text, page)
+                backend.search(rules.currentValue, search_terms.text, page)
             }
         }
         Button {
@@ -480,7 +445,7 @@ ApplicationWindow {
             enabled: false
             onClicked: {
                 page += 1
-                backend.search(website.currentValue, search_terms.text, page)
+                backend.search(rules.currentValue, search_terms.text, page)
             }
         }
     }

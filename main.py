@@ -1,5 +1,7 @@
 import base64
 import io
+import json
+import os
 import re
 import sys
 from concurrent.futures import ThreadPoolExecutor
@@ -54,6 +56,28 @@ class MainWindow(QObject):
         self._pool = ThreadPoolExecutor()
         self._search_result_model = QDataListModel([])
 
+    @Slot(result = 'QVariant')
+    def get_rules(self):
+        pro_list = ['bitsearch', 'btsow_proxy', 'zooqle']
+        rules = []
+
+        file_list = os.listdir('rule')
+        for file in file_list:
+            if file == '_temp.json' or file == 'bak':
+                continue
+            with open('rule/' + file, encoding = 'utf-8') as f:
+                rule_obj = json.load(f)
+                rules.append({
+                    'pro':   rule_obj['id'] in pro_list,
+                    'key':   rule_obj['id'],
+                    'value': rule_obj['name']
+                })
+        return rules
+
+    @Slot(result = 'QVariant')
+    def get_config(self):
+        return self._config.get_config()
+
     @Slot(str, int, result = str)
     def test_proxy(self, server, port):
         logger.info(f'检查代理是否符合规则: {server}:{port}')
@@ -80,10 +104,6 @@ class MainWindow(QObject):
         except Exception as e:
             logger.error(f'代理校验失败: {e}')
             return 'failed'
-
-    @Slot(result = 'QVariant')
-    def get_config(self):
-        return self._config.get_config()
 
     @Slot(str, result = str)
     def magnet_qr_code(self, magnet):

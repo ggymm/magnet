@@ -1,6 +1,7 @@
 {
   "id": "btgg",
   "name": "BTGG【代理】",
+  "desc": "",
   "proxy": true,
   "publish": "",
   "publishMail": "",

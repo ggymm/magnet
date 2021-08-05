@@ -1,6 +1,7 @@
 {
   "id": "btsow",
-  "name": "BTSOW【优】",
+  "name": "BTSOW",
+  "desc": "【优】",
   "proxy": false,
   "publish": "https://btsow.com",
   "publishMail": "",

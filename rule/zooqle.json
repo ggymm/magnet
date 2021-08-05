@@ -1,0 +1,56 @@
+{
+  "id": "zooqle",
+  "name": "Zooqle",
+  "desc": "【优】【英文】【支持中文搜索】",
+  "proxy": false,
+  "publish": "",
+  "publishMail": "",
+  "url": "https://zooqle.com",
+  "referer": "https://zooqle.com",
+  "path": {
+    "default": "/search?pg={p}&q={k}&v=t"
+  },
+  "parse": {
+    "item": {
+      "type": "xpath",
+      "xpath": "//tbody/tr",
+      "startIndex": 0
+    },
+    "page": [
+      {
+        "type": "xpath",
+        "xpath": "//ul[contains(@class,'pagination')]/li[last()-2]/a/text()"
+      }
+    ],
+    "magnet": [
+      {
+        "type": "xpath",
+        "xpath": "//a[@title='Magnet link']/@href"
+      }
+    ],
+    "name": [
+      {
+        "type": "xpathList",
+        "xpath": "//td/a[@class=' small']//text()"
+      }
+    ],
+    "hot": [
+      {
+        "type": "xpath",
+        "xpath": "//td[@class='text-nowrap smaller']//div[contains(@class,'prog-green')]/text()"
+      }
+    ],
+    "size": [
+      {
+        "type": "xpath",
+        "xpath": "//td[@class='smaller']//text()"
+      }
+    ],
+    "time": [
+      {
+        "type": "xpath",
+        "xpath": "//td[@class='text-nowrap text-muted smaller']/text()"
+      }
+    ]
+  }
+}

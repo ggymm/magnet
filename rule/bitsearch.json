@@ -1,0 +1,56 @@
+{
+  "id": "bitsearch",
+  "name": "BitSearch",
+  "desc": "【优】【英文】【支持中文搜索】",
+  "proxy": false,
+  "publish": "",
+  "publishMail": "",
+  "url": "https://bitsearch.to",
+  "referer": "https://bitsearch.to",
+  "path": {
+    "default": "/search?q={k}&page={p}"
+  },
+  "parse": {
+    "item": {
+      "type": "xpath",
+      "xpath": "//div[@class='search-result view-box']",
+      "startIndex": 0
+    },
+    "page": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='pagination text-right']/a[last()-1]/text()"
+      }
+    ],
+    "magnet": [
+      {
+        "type": "xpath",
+        "xpath": "//div[contains(@class,'links')]/a[2]/@href"
+      }
+    ],
+    "name": [
+      {
+        "type": "xpath",
+        "xpath": "//h5[contains(@class,'title')]/a/text()"
+      }
+    ],
+    "hot": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='stats']/div[3]/font/text()"
+      }
+    ],
+    "size": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='stats']/div[2]/text()"
+      }
+    ],
+    "time": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='stats']/div[last()]/text()"
+      }
+    ]
+  }
+}

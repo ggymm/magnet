@@ -1,0 +1,61 @@
+{
+  "id": "zhongziso",
+  "name": "种子搜",
+  "desc": "",
+  "proxy": false,
+  "publish": "https://www.zhongzidizhi.com/",
+  "publishMail": "",
+  "url": "https://m.zhongziso23.xyz",
+  "referer": "https://m.zhongziso23.xyz",
+  "path": {
+    "default": "/list_ctime/{k}/{p}"
+  },
+  "parse": {
+    "item": {
+      "type": "xpath",
+      "xpath": "//div[@class='panel-body']/ul[@class='list-group']",
+      "startIndex": 0
+    },
+    "page": [
+      {
+        "type": null,
+        "default": 0
+      }
+    ],
+    "magnet": [
+      {
+        "type": "xpath",
+        "xpath": "//a[@class='text-success']/@href"
+      },
+      {
+        "type": "subIndex",
+        "start": -40,
+        "end": null
+      }
+    ],
+    "name": [
+      {
+        "type": "xpathList",
+        "xpath": "//a[@class='text-success']//text()"
+      }
+    ],
+    "hot": [
+      {
+        "type": null,
+        "default": 99
+      }
+    ],
+    "size": [
+      {
+        "type": "xpath",
+        "xpath": "//dl[@class='list-code']/dd[2]/text()"
+      }
+    ],
+    "time": [
+      {
+        "type": "xpath",
+        "xpath": "//dl[@class='list-code']/dd[3]/text()"
+      }
+    ]
+  }
+}

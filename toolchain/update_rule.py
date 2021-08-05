@@ -18,7 +18,7 @@ def gen_rules():
             fp.write(json.dumps(rule, ensure_ascii=False, sort_keys=False, indent=2, separators=(', ', ': ')))
 
 
-# 生成UI结构
+# 生成UI结构（弃用）
 def gen_list_model():
     file_path = '../rule'
     file_list = os.listdir(file_path)

@@ -1,6 +1,7 @@
 {
   "id": "bthub",
   "name": "BTHUB",
+  "desc": "",
   "proxy": false,
   "publish": "https://github.com/fwonggh/Bthub",
   "publishMail": "",

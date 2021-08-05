@@ -1,11 +1,12 @@
 {
-  "id": "9cili",
-  "name": "磁力海",
+  "id": "bthook",
+  "name": "磁力树",
+  "desc": "和cili9的规则一致",
   "proxy": false,
-  "publish": "https://9cili.com",
+  "publish": "bthook.cc",
   "publishMail": "",
-  "url": "https://drxdsn0k.xyz",
-  "referer": "https://drxdsn0k.xyz",
+  "url": "https://4raq0y70.xyz",
+  "referer": "https://4raq0y70.xyz",
   "path": {
     "default": "/search-{k}-0-0-{p}.html"
   },

@@ -1,6 +1,7 @@
 {
   "id": "sofan",
   "name": "搜番",
+  "desc": "",
   "proxy": false,
   "publish": "https://sofan.icu",
   "publishMail": "lauchichoy@south.flyzoohotel.com.cn",

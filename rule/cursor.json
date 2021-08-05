@@ -1,6 +1,7 @@
 {
   "id": "cursor",
   "name": "光标网",
+  "desc": "",
   "proxy": false,
   "publish": "https://cursor.vip/vip",
   "publishMail": "",
