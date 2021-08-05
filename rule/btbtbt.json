@@ -1,0 +1,60 @@
+{
+  "id": "btbtbt",
+  "name": "种子搜索",
+  "desc": "",
+  "proxy": false,
+  "publish": "https://xn--i8sq8r6zst7c.com/",
+  "publishMail": "52btbtbt@gmail.com",
+  "url": "https://cl.clcl108.com",
+  "referer": "https://cl.clcl108.com",
+  "path": {
+    "default": "/search-{k}-0-0-{p}.html"
+  },
+  "parse": {
+    "item": {
+      "type": "xpath",
+      "xpath": "//div[@class='tbox']/div[@class='ssbox']",
+      "startIndex": 0
+    },
+    "page": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='pager']/span[1]/text()"
+      },
+      {
+        "type": "regex",
+        "regex": "共([\\d.]+)页"
+      }
+    ],
+    "magnet": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='sbar']/span[1]/a/@href"
+      }
+    ],
+    "name": [
+      {
+        "type": "xpathList",
+        "xpath": "//div[@class='title']/h3/a//text()"
+      }
+    ],
+    "hot": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='sbar']/span[5]/b/text()"
+      }
+    ],
+    "size": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='sbar']/span[3]/b/text()"
+      }
+    ],
+    "time": [
+      {
+        "type": "xpath",
+        "xpath": "//div[@class='sbar']/span[2]/b/text()"
+      }
+    ]
+  }
+}
