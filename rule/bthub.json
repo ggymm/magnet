@@ -5,8 +5,8 @@
   "proxy": false,
   "publish": "https://github.com/fwonggh/Bthub",
   "publishMail": "",
-  "url": "https://bthub36.xyz/cn",
-  "referer": "https://bthub36.xyz/cn",
+  "url": "https://bthub.xyz/cn",
+  "referer": "https://bthub.xyz/cn",
   "path": {
     "default": "/search/kw-{k}-{p}.html"
   },

@@ -72,6 +72,7 @@ class MainWindow(QObject):
                     'key':   rule_obj['id'],
                     'value': rule_obj['name']
                 })
+        rules.sort(key = lambda x: x['value'], reverse = False)
         return rules
 
     @Slot(result = 'QVariant')
