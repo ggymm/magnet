@@ -184,7 +184,7 @@ def main():
     # 绑定视图
     backend = MainWindow(app, Config())
     engine.rootContext().setContextProperty('backend', backend)
-    engine.load('main.qml')
+    engine.load('qrc:/main.qml')
 
     if not engine.rootObjects():
         return -1
