@@ -1,6 +1,6 @@
 {
   "proxy": {
-    "enable": true,
+    "enable": false,
     "type": "http",
     "host": "localhost",
     "port": 9910,
